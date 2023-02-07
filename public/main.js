@@ -1,3 +1,5 @@
+import router from "./router.js";
+
 import MarbleLabelInput from "./components/labelInput/LabelInput.js";
 import MarbleDropdown from "./components/dropdown/Dropdown.js";
 import MarbleCheckbox from "./components/checkbox/Checkbox.js";
@@ -10,3 +12,5 @@ customElements.define("marble-checkbox", MarbleCheckbox);
 customElements.define("marble-labelinput", MarbleLabelInput);
 customElements.define("marble-login", MarbleLogin);
 customElements.define("marble-register", MarbleRegister);
+
+router();
