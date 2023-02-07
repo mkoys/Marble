@@ -9,7 +9,7 @@ export default class MarbleLogin extends BaseComponent {
         this.useTemplate("/components/views/Login.html");
         this.load = () => {
             this.router = router();
-            this.shadowRoot.querySelector(".link").addEventListener("click", () => {
+            this.shadowRoot.querySelector(".redirect").addEventListener("click", () => {
                 this.router.setRoute("register");
             });
         };

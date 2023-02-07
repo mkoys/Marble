@@ -30,7 +30,7 @@ export default class MarbleRegister extends BaseComponent {
             });
 
             this.router = router();
-            this.shadowRoot.querySelector(".link").addEventListener("click", () => {
+            this.shadowRoot.querySelector(".redirect").addEventListener("click", () => {
                 this.router.setRoute("login");
             });
         }

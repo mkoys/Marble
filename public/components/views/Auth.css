@@ -59,6 +59,8 @@ label {
 }
 
 .link {
+    cursor: pointer;
+    text-decoration: underline;
     width: fit-content;
     color: lightskyblue;
     font-size: 12px;
