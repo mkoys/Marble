@@ -1,4 +1,5 @@
 import BaseComponent from "../../source/BaseComponent.js";
+import router from "../../router.js";
 
 export default class MarbleLogin extends BaseComponent {
     constructor() {
@@ -6,5 +7,12 @@ export default class MarbleLogin extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("Auth.css", import.meta.url);
         this.useTemplate("/components/views/Login.html");
+        this.load = () => {
+            this.router = router();
+            this.shadowRoot.querySelector(".link").addEventListener("click", () => {
+                this.router.setRoute("register");
+            });
+        };
+
     }
 }

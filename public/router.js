@@ -1,12 +1,17 @@
 import Router from "./source/Router.js";
 
+let router;
 
 export default () => {
-    const root = document.querySelector(".container");
+    if(!router) {
+        const root = document.querySelector(".container");
+        router = new Router({ root });
+        router.addRoute("login", document.createElement("marble-login"));
+        router.addRoute("register", document.createElement("marble-register"));
+        router.setRoute("login");
+        return router;
+    }else {
+        return router;
+    }
     
-    const router = new Router({ root });
-    
-    router.addRoute("login", document.createElement("marble-login"));
-    
-    router.setRoute("login");
 }

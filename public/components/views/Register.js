@@ -1,9 +1,10 @@
 import BaseComponent from "../../source/BaseComponent.js";
+import router from "../../router.js";
 
 export default class MarbleRegister extends BaseComponent {
     constructor() {
         super();
-        
+
         this.addStyle("reset.css");
         this.addStyle("Auth.css", import.meta.url);
         this.useTemplate("/components/views/Register.html");
@@ -26,6 +27,11 @@ export default class MarbleRegister extends BaseComponent {
                     this.month.getValue(),
                     this.year.getValue(),
                 );
+            });
+
+            this.router = router();
+            this.shadowRoot.querySelector(".link").addEventListener("click", () => {
+                this.router.setRoute("login");
             });
         }
     }
