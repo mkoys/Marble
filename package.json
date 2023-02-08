@@ -14,7 +14,7 @@
   "author": "Mkoys",
   "license": "MIT",
   "dependencies": {
-    "@mkoys/post": "^1.1.0"
+    "@mkoys/post": "^1.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
