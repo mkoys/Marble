@@ -1,7 +1,7 @@
 {
   "name": "@mkoys/marble",
   "version": "1.0.0",
-  "description": "",
+  "description": "# Usage",
   "main": "app.js",
   "type": "module",
   "scripts": {
@@ -18,5 +18,13 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkoys/Marble.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mkoys/Marble/issues"
+  },
+  "homepage": "https://github.com/mkoys/Marble#readme"
 }
