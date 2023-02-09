@@ -1,3 +1,4 @@
+import config from "../../config.js";
 import BaseComponent from "../../source/BaseComponent.js";
 import router from "../../router.js";
 
@@ -19,15 +20,28 @@ export default class MarbleRegister extends BaseComponent {
             this.year = this.shadowRoot.querySelector("#year");
 
             this.submit.addEventListener("click", async () => {
-                console.log(
-                    this.username.getValue(),
-                    this.email.getValue(),
-                    this.password.getValue(),
-                    this.day.getValue(),
-                    this.month.getValue(),
-                    this.year.getValue(),
-                );
+                const body = {
+                    username: this.username.getValue(),
+                    email: this.email.getValue(),
+                    password: this.password.getValue(),
+                    "re-password": this.password.getValue()
+                }
+
+                const result = await fetch(config.baseURL + "/auth/register", {
+                    method: "POST",
+                    body: JSON.stringify(body),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const resultJson = await result.json();
+
+                console.log(resultJson);
+
             });
+
+
 
             this.router = router();
             this.shadowRoot.querySelector(".redirect").addEventListener("click", () => {
