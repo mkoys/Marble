@@ -67,12 +67,29 @@
 }
 
 .date {
-    color: rgb(255, 255, 255);
+    font-size: 14px;
+    color: rgb(200, 200, 200);
     display: flex;
     justify-content: center;
     align-items: center;
     width: 32px;
     height: 32px;
+    transition: 0.2s ease color;
+    cursor: pointer;
+}
+
+.date:hover {
+    color: rgb(255, 255, 255);
+}
+
+.selected {
+    background-color: #6200EE;
+    border-radius: 50%;
+    color: #151515;
+}
+
+.selected:hover {
+    color: #151515 !important;
 }
 
 .nodate {
