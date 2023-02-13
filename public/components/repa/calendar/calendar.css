@@ -41,6 +41,10 @@
     margin-right: 24px;
 }
 
+.control {
+    cursor: pointer;
+}
+
 .control > path {
     fill: rgb(200, 200, 200);
     transition: 0.2s ease fill;
@@ -48,12 +52,8 @@
 
 
 .control:hover > path {
-    fill: #6200EE;
+    fill: rgb(var(--main-color));
 }
-
-.back {}
-
-.next {}
 
 .days {
     display: flex;
@@ -98,7 +98,7 @@
 }
 
 .selected {
-    background-color: #6200EE;
+    background-color: rgb(var(--main-color));
     border-radius: 50%;
     color: #151515 !important;
 }
@@ -108,18 +108,18 @@
 }
 
 .range {
-    background-color: rgba(98, 0, 238, 0.6);
+    background-color: rgba(var(--main-color), 0.6);
     border-radius: 0px;
     color: #151515 !important;
 }
 
 .rangeStart {
-    background-color: rgba(98, 0, 238, 0.6);
+    background-color: rgba(var(--main-color), 0.6);
     border-radius: 50% 0px 0px 50%;
 }
 
 .rangeEnd {
-    background-color: rgba(98, 0, 238, 0.6);
+    background-color: rgba(var(--main-color), 0.6);
     border-radius: 0px 50% 50% 0px;
 }
 

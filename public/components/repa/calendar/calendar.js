@@ -6,8 +6,9 @@ export default class RepaCalendar extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("calendar.css", import.meta.url);
         this.useTemplate("/components/repa/calendar/calendar.html");
-        let currentSelect = [];
-        let rangeSelected = [];
+        this.currentSelect = [];
+        this.rangeSelected = [];
+        this.selectedCallback = () => {}
         let currentDate = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -75,56 +76,63 @@ export default class RepaCalendar extends BaseComponent {
                         return;
                     }
 
-                    if(rangeSelected) {
-                        rangeSelected.forEach(item => {
+                    if(this.rangeSelected) {
+                        this.rangeSelected.forEach(item => {
                             item.classList.remove("rangeEnd");
                             item.classList.remove("rangeStart");
                             item.classList.remove("range");
-                        })
+                        });
+                        this.rangeSelected = [];
                     }
 
-                    if(currentSelect.length == 0) {
-                        currentSelect.push(event.target);
+                    if(this.currentSelect.length == 0) {
+                        this.currentSelect.push(event.target);
                         event.target.classList.toggle("selected");
                     }else {
-                        const index = currentSelect.indexOf(event.target);
+                        const index = this.currentSelect.indexOf(event.target);
                         if(index > -1) {
                             event.target.classList.toggle("selected");
-                            currentSelect.splice(index, 1);
+                            this.currentSelect.splice(index, 1);
                         }else if(event.ctrlKey) {
                             event.target.classList.toggle("selected");
-                            currentSelect.push(event.target);
-                        }else if(event.shiftKey && currentSelect.length == 1) {
+                            this.currentSelect.push(event.target);
+                        }else if(event.shiftKey && this.currentSelect.length == 1) {
                             const dates = this.shadowRoot.querySelector(".dates");
                             let start = false;
                             for(const child of dates.children) {
                                 if(start) {
-                                    rangeSelected.push(child);
-                                    if(child.children[0] === event.target || child.children[0] === currentSelect[0]) {
+                                    this.rangeSelected.push(child);
+                                    if(child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
                                         start = false;
                                         child.classList.add("rangeEnd");
                                     }else {
                                         child.classList.add("range");
                                     }
                                 }else {
-                                    if(child.children[0] === event.target || child.children[0] === currentSelect[0]) {
-                                        rangeSelected.push(child);
+                                    if(child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
+                                        this.rangeSelected.push(child);
                                         child.classList.add("rangeStart");
                                         start = true;
                                     }
                                 }
                             }
                             event.target.classList.toggle("selected");
-                            currentSelect.push(event.target);
+                            this.currentSelect.push(event.target);
                         }else {
-                            currentSelect.forEach(item => {
+                            this.currentSelect.forEach(item => {
                                 item.classList.toggle("selected");
                             });
-                            currentSelect = [];
+                            this.currentSelect = [];
                             event.target.classList.toggle("selected");
-                            currentSelect.push(event.target);
+                            this.currentSelect.push(event.target);
                         }
                     }
+
+                    const selected = [];
+                    this.currentSelect.forEach(item => selected.push(item.textContent));
+                    const range = [];
+                    this.rangeSelected.forEach(item => range.push(item.textContent));
+                    this.selectedCallback(selected, range);
                 });
             }
         }
@@ -139,6 +147,10 @@ export default class RepaCalendar extends BaseComponent {
             } else {
                 return false;
             }
+        }
+
+        this.selected = (callback) => {
+            this.selectedCallback = callback;
         }
 
         function getAllDaysInMonth(year, month, tag) {

@@ -9,4 +9,12 @@ export default class MarbleRepa extends BaseComponent {
         this.addStyle("Repa.css", import.meta.url);
         this.useTemplate("/components/views/repa/Repa.html");
     }
+    
+    load = () => {
+        const calendar = this.shadowRoot.querySelector("marble-repa-calendar");
+
+        calendar.selected((selected, range) => {
+            console.log(selected, range);
+        })
+    }
 }
