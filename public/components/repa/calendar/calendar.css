@@ -89,7 +89,7 @@
     align-items: center;
     width: 32px;
     height: 32px;
-    transition: 0.2s ease color;
+    transition: 0.2s ease all;
     cursor: pointer;
 }
 
@@ -98,10 +98,13 @@
 }
 
 .selected {
-    border-color: #151515 !important;
     background-color: #6200EE;
     border-radius: 50%;
     color: #151515 !important;
+}
+
+.root {
+    transition: 0.2s ease all;
 }
 
 .range {
