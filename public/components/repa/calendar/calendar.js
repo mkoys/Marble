@@ -59,15 +59,22 @@ export default class RepaCalendar extends BaseComponent {
 
             for (const day of days) {
                 const element = document.createElement("div");
+                const root = document.createElement("div");
                 element.classList.add("date");
                 if (!day.tag) {
                     element.classList.add("nodate");
                 }
                 this.checkIfCurrentDate(day.date) ? element.classList.add("currentDate") : "";
                 element.textContent = day.date.getDate();
-                dateElement.appendChild(element);
+                root.classList.add("root");
+                root.appendChild(element);
+                dateElement.appendChild(root);
 
-                element.addEventListener("click", (event) => {
+                root.addEventListener("click", (event) => {
+                    if(event.target.classList.contains("root")) {
+                        return;
+                    }
+
                     if(rangeSelected) {
                         rangeSelected.forEach(item => {
                             item.classList.remove("rangeEnd");
@@ -93,14 +100,14 @@ export default class RepaCalendar extends BaseComponent {
                             for(const child of dates.children) {
                                 if(start) {
                                     rangeSelected.push(child);
-                                    if(child === event.target || child === currentSelect[0]) {
+                                    if(child.children[0] === event.target || child.children[0] === currentSelect[0]) {
                                         start = false;
                                         child.classList.add("rangeEnd");
                                     }else {
                                         child.classList.add("range");
                                     }
                                 }else {
-                                    if(child === event.target || child === currentSelect[0]) {
+                                    if(child.children[0] === event.target || child.children[0] === currentSelect[0]) {
                                         rangeSelected.push(child);
                                         child.classList.add("rangeStart");
                                         start = true;

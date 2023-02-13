@@ -98,23 +98,25 @@
 }
 
 .selected {
+    border-color: #151515 !important;
     background-color: #6200EE;
     border-radius: 50%;
     color: #151515 !important;
 }
 
 .range {
-    border-color: #151515 !important;
-    background-color: #6200EE;
+    background-color: rgba(98, 0, 238, 0.6);
     border-radius: 0px;
     color: #151515 !important;
 }
 
 .rangeStart {
+    background-color: rgba(98, 0, 238, 0.6);
     border-radius: 50% 0px 0px 50%;
 }
 
 .rangeEnd {
+    background-color: rgba(98, 0, 238, 0.6);
     border-radius: 0px 50% 50% 0px;
 }
 
