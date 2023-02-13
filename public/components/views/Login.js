@@ -43,6 +43,7 @@ export default class MarbleLogin extends BaseComponent {
 
                 if (resultJson.token) {
                     localStorage.setItem("token", resultJson.token);
+                    this.router.setRoute("repa");
                 }
             });
         };
