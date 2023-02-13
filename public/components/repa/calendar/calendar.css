@@ -1,0 +1,80 @@
+.calendar {
+    padding-bottom: 10px;
+    margin-top: 20px;
+    width: 100%;
+    background-color: #151515;
+    border-radius: 4px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.current {
+    margin-left: 24px;
+    margin-top: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.currentText {
+    color: rgb(200, 200, 200);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.downArrow {
+    margin-left: 10px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 34px;
+    margin-right: 24px;
+}
+
+.back {}
+
+.next {}
+
+.days {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    color: rgb(200, 200, 200);
+    font-size: 14px;
+}
+
+.dates {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: auto auto auto auto auto auto auto;
+}
+
+.date {
+    color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+}
+
+.nodate {
+    color: rgba(255, 255, 255, 0.332) !important;
+}
