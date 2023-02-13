@@ -1,3 +1,9 @@
 main {
-    
+    width: 100%;
+    display: flex;
+}
+
+.cards {
+    width: 256px;
+    margin: 20px;
 }
