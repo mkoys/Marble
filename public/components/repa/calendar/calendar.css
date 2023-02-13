@@ -22,6 +22,7 @@
 }
 
 .currentText {
+    user-select: none;
     color: rgb(200, 200, 200);
     font-size: 14px;
     font-weight: 500;
@@ -32,11 +33,22 @@
 }
 
 .controls {
+    user-select: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 34px;
     margin-right: 24px;
+}
+
+.control > path {
+    fill: rgb(200, 200, 200);
+    transition: 0.2s ease fill;
+}
+
+
+.control:hover > path {
+    fill: #6200EE;
 }
 
 .back {}
@@ -50,6 +62,7 @@
 }
 
 .day {
+    user-select: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,6 +80,8 @@
 }
 
 .date {
+    border-radius: 50%;
+    user-select: none;
     font-size: 14px;
     color: rgb(200, 200, 200);
     display: flex;
@@ -85,7 +100,22 @@
 .selected {
     background-color: #6200EE;
     border-radius: 50%;
-    color: #151515;
+    color: #151515 !important;
+}
+
+.range {
+    border-color: #151515 !important;
+    background-color: #6200EE;
+    border-radius: 0px;
+    color: #151515 !important;
+}
+
+.rangeStart {
+    border-radius: 50% 0px 0px 50%;
+}
+
+.rangeEnd {
+    border-radius: 0px 50% 50% 0px;
 }
 
 .selected:hover {
@@ -93,5 +123,9 @@
 }
 
 .nodate {
-    color: rgba(255, 255, 255, 0.332) !important;
+    color: rgba(255, 255, 255, 0.332);
+}
+
+.currentDate {
+    border: 1px solid white;
 }
