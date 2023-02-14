@@ -4,6 +4,14 @@ main {
 }
 
 .cards {
+    position: fixed;
     width: 256px;
     margin: 20px;
+}
+
+.main {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }

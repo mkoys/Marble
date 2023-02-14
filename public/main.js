@@ -9,6 +9,7 @@ import MarbleRegister from "./components/views/Register.js";
 
 import RepaUserCard from "./components/repa/userCard/userCard.js";
 import RepaCalendar from "./components/repa/calendar/calendar.js";
+import RepaAttendance from "./components/repa/attendance/attendance.js";
 
 import MarbleRepa from "./components/views/repa/Repa.js";
 
@@ -23,4 +24,5 @@ customElements.define("marble-register", MarbleRegister);
 
 customElements.define("marble-repa-usercard", RepaUserCard);
 customElements.define("marble-repa-calendar", RepaCalendar);
+customElements.define("marble-repa-attendance", RepaAttendance);
 customElements.define("marble-repa", MarbleRepa);

@@ -1,0 +1,107 @@
+.box {
+    width: 818px;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #151515;
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+}
+
+.boxHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.week {
+    font-weight: 500;
+    margin-left: 28px;
+    font-size: 12px;
+    color: rgb(200, 200, 200);
+}
+
+.date {
+    margin-right: 28px;
+    font-size: 14px;
+    color: white;
+}
+
+.boxInput {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.drag {
+    margin-right: 5px;
+}
+
+.description {
+    width: 100%;
+    color: white;
+}
+
+.time {
+    width: 80px;
+}
+
+.class {
+    width: 80px;
+}
+
+input {
+    font-size: 15px;
+    color: white;
+    padding: 21px;
+    height: 18px;
+    background-color: #0E0E0E;
+    outline: none;
+    border-radius: 4px;
+    border: 0px;
+    margin-left: 10px;
+}
+
+.boxOptions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    width: 46px;
+    height: 46px;
+    background-color: rgb(var(--main-color));
+    border-radius: 4px;
+}
+
+.check {
+    margin-left: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkbox {
+    display: flex;
+}
+
+.checkbox > p {
+    color: white;
+    font-size: 13px;
+}
+
+.closeIcon > path {
+    fill: rgb(200, 200, 200);
+}

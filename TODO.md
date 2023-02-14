@@ -1,4 +1,7 @@
 # Todo
 
 - [ ] Write README
-- [x] Create routing system
+- [ ] Clean up calendar
+- [ ] Calendar year dropdown
+- [ ] User more menu
+- [ ] Logout
