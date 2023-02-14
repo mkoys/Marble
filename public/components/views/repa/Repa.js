@@ -18,14 +18,18 @@ export default class MarbleRepa extends BaseComponent {
 
         calendar.selected(({ selected, range, month, year, selectedElements, rangeElements }) => {
             const all = range.length ? range : selected;
+            const rangeFlag = range.length ? true : false;
 
             all.forEach((item, index) => {
                 if (!map.has(`${item} ${month} ${year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
                     map.set(`${item} ${month} ${year}`, newAttendance);
-                    
+
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item}. ${monthNames[month]} ${year}`);
+                    if(index != 0 && rangeFlag) {
+                        newAttendance.setAttribute("noclose", "true");
+                    }
                     mainElement.appendChild(newAttendance);
 
                     newAttendance.close(() => {

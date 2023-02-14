@@ -6,7 +6,7 @@ export default class RepaAttendance extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("attendance.css", import.meta.url);
         this.useTemplate("/components/repa/attendance/attendance.html");
-        this.closeCallback = () => {};
+        this.closeCallback = () => { };
     }
 
     close(callback) {
@@ -18,16 +18,21 @@ export default class RepaAttendance extends BaseComponent {
         const weekText = this.shadowRoot.querySelector(".week");
         const dateText = this.shadowRoot.querySelector(".date");
 
-        closeElement.addEventListener("click", () => {
-            this.closeCallback();
-        });
 
-        if(this.getAttribute("week")) {
-            weekText.textContent = "Week " + this.getAttribute("week"); 
+        if (this.getAttribute("noclose")) {
+            closeElement.classList.add("hide");
+        } else {
+            closeElement.addEventListener("click", () => {
+                this.closeCallback();
+            });
         }
 
-        if(this.getAttribute("date")) {
-            dateText.textContent = this.getAttribute("date"); 
+        if (this.getAttribute("week")) {
+            weekText.textContent = "Week " + this.getAttribute("week");
+        }
+
+        if (this.getAttribute("date")) {
+            dateText.textContent = this.getAttribute("date");
         }
 
         let box = this.shadowRoot.querySelector(".box");
@@ -94,7 +99,7 @@ export default class RepaAttendance extends BaseComponent {
                     previous.description.addEventListener("input", () => checkBefore())
                     previous.time.addEventListener("input", () => checkBefore())
                     previous.classType.addEventListener("input", () => checkBefore())
-                }else {
+                } else {
                     previous = null;
                 }
 
