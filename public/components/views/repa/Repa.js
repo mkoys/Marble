@@ -19,17 +19,14 @@ export default class MarbleRepa extends BaseComponent {
         calendar.selected(({ selected, range, month, year, selectedElements, rangeElements }) => {
             const all = range.length ? range : selected;
             const rangeFlag = range.length ? true : false;
-
-            all.forEach((item, index) => {
+            for (let index = 0; index < all.length; index++) {
+                const item = all[index];
                 if (!map.has(`${item} ${month} ${year}`)) {
-                    const newAttendance = document.createElement("marble-repa-attendance");
+                    const newAttendance = document.createElement("marble-repa-attendance"); 
                     map.set(`${item} ${month} ${year}`, newAttendance);
-
+                    
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item}. ${monthNames[month]} ${year}`);
-                    if(index != 0 && rangeFlag) {
-                        newAttendance.setAttribute("noclose", "true");
-                    }
                     mainElement.appendChild(newAttendance);
 
                     newAttendance.close(() => {
@@ -37,15 +34,15 @@ export default class MarbleRepa extends BaseComponent {
                         const index = all.findIndex(allItem => allItem.textContent === item);
 
                         let target = all[index];
-                        if(target.classList.contains("root")) {
+                        if (target.classList.contains("root")) {
                             target = target.children[0];
                         }
 
-                        calendar.removeSelection({target});
+                        calendar.removeSelection({ target });
                     });
                 }
-            });
-
+            }
+            let rangeCloseDone = true;
             map.forEach((value, key) => {
                 let found = false;
 
@@ -55,10 +52,18 @@ export default class MarbleRepa extends BaseComponent {
                     }
                 });
 
+                if(!rangeCloseDone && rangeFlag) {
+                    value.setAttribute("noclose", "true");
+                }else if(rangeFlag) {
+                    rangeCloseDone = false;
+                }
+
                 if (!found) {
                     mainElement.removeChild(value);
                     map.delete(key);
                 }
+
+                
             });
         })
     }

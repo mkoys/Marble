@@ -10,7 +10,8 @@ main {
 }
 
 .main {
-    width: 100%;
+    width: calc(100% - 296px);
+    margin-left: 296px;
     display: flex;
     align-items: center;
     flex-direction: column;
