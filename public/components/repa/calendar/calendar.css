@@ -131,6 +131,10 @@
     color: rgba(255, 255, 255, 0.332);
 }
 
+.nodate:hover {
+    color: rgba(255, 255, 255, 0.332) !important;
+}
+
 .currentDate {
     border: 1px solid white;
 }

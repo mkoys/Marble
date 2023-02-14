@@ -17,7 +17,7 @@ export default class MarbleRepa extends BaseComponent {
         let map = new Map();
 
         calendar.selected(({ selected, range, month, year }) => {
-            const all = [...selected, ...range.slice(1, range.length - 1)];
+            const all = range.length ? range : selected;
 
             all.forEach(item => {
                 if (!map.has(`${item} ${month} ${year}`)) {
