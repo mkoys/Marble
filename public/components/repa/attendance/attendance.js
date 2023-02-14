@@ -9,6 +9,18 @@ export default class RepaAttendance extends BaseComponent {
     }
 
     load = () => {
+        const weekText = this.shadowRoot.querySelector(".week");
+        const dateText = this.shadowRoot.querySelector(".date");
+
+        if(this.getAttribute("week")) {
+            weekText.textContent = "Week " + this.getAttribute("week"); 
+        }
+
+        if(this.getAttribute("date")) {
+            dateText.textContent = this.getAttribute("date"); 
+        }
+
+
         let box = this.shadowRoot.querySelector(".box");
         let inputsElement = this.shadowRoot.querySelector(".boxInput");
         let inputsElementEmpty = inputsElement.cloneNode(true);

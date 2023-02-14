@@ -132,7 +132,7 @@ export default class RepaCalendar extends BaseComponent {
                     this.currentSelect.forEach(item => selected.push(item.textContent));
                     const range = [];
                     this.rangeSelected.forEach(item => range.push(item.textContent));
-                    this.selectedCallback(selected, range);
+                    this.selectedCallback({selected, range, month: currentDate.getMonth(), year: currentDate.getFullYear()});
                 });
             }
         }

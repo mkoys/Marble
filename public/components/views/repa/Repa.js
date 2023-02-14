@@ -9,12 +9,40 @@ export default class MarbleRepa extends BaseComponent {
         this.addStyle("Repa.css", import.meta.url);
         this.useTemplate("/components/views/repa/Repa.html");
     }
-    
-    load = () => {
-        const calendar = this.shadowRoot.querySelector("marble-repa-calendar");
 
-        calendar.selected((selected, range) => {
-            console.log(selected, range);
+    load = () => {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const mainElement = this.shadowRoot.querySelector(".main");
+        const calendar = this.shadowRoot.querySelector("marble-repa-calendar");
+        let map = new Map();
+
+        calendar.selected(({ selected, range, month, year }) => {
+            const all = [...selected, ...range.slice(1, range.length - 1)];
+
+            all.forEach(item => {
+                if (!map.has(`${item} ${month} ${year}`)) {
+                    const newAttendance = document.createElement("marble-repa-attendance");
+                    map.set(`${item} ${month} ${year}`, newAttendance);
+                    newAttendance.setAttribute("week", "None");
+                    newAttendance.setAttribute("date", `${item}. ${monthNames[month]} ${year}`);
+                    mainElement.appendChild(newAttendance);
+                }
+            });
+
+            map.forEach((value, key) => {
+                let found = false;
+
+                all.forEach(item => {
+                    if (key === `${item} ${month} ${year}`) {
+                        found = true;
+                    }
+                });
+
+                if (!found) {
+                    mainElement.removeChild(value);
+                    map.delete(key);
+                }
+            });
         })
     }
 }
