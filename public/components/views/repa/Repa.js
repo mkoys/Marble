@@ -22,9 +22,9 @@ export default class MarbleRepa extends BaseComponent {
             for (let index = 0; index < all.length; index++) {
                 const item = all[index];
                 if (!map.has(`${item} ${month} ${year}`)) {
-                    const newAttendance = document.createElement("marble-repa-attendance"); 
+                    const newAttendance = document.createElement("marble-repa-attendance");
                     map.set(`${item} ${month} ${year}`, newAttendance);
-                    
+
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item}. ${monthNames[month]} ${year}`);
                     mainElement.appendChild(newAttendance);
@@ -42,8 +42,11 @@ export default class MarbleRepa extends BaseComponent {
                     });
                 }
             }
+
             let rangeCloseDone = true;
+            let last = null;
             map.forEach((value, key) => {
+                last = value;
                 let found = false;
 
                 all.forEach(item => {
@@ -52,9 +55,11 @@ export default class MarbleRepa extends BaseComponent {
                     }
                 });
 
-                if(!rangeCloseDone && rangeFlag) {
+
+                if (!rangeCloseDone && rangeFlag) {
                     value.setAttribute("noclose", "true");
-                }else if(rangeFlag) {
+                    //value.setAttribute("nobutton", "true");
+                } else if (rangeFlag) {
                     rangeCloseDone = false;
                 }
 
@@ -62,9 +67,7 @@ export default class MarbleRepa extends BaseComponent {
                     mainElement.removeChild(value);
                     map.delete(key);
                 }
-
-                
             });
-        })
+        });
     }
 }

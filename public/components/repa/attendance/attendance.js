@@ -17,7 +17,12 @@ export default class RepaAttendance extends BaseComponent {
         const closeElement = this.shadowRoot.querySelector(".close");
         const weekText = this.shadowRoot.querySelector(".week");
         const dateText = this.shadowRoot.querySelector(".date");
+        const buttonMenu = this.shadowRoot.querySelector(".buttons");
+        const saveButton = this.shadowRoot.querySelector(".save");
 
+        if (this.getAttribute("nobutton")) {
+            buttonMenu.classList.add("hideMenu");
+        }
 
         if (this.getAttribute("noclose")) {
             closeElement.classList.add("hide");
@@ -35,7 +40,29 @@ export default class RepaAttendance extends BaseComponent {
             dateText.textContent = this.getAttribute("date");
         }
 
+        let finalValue = { date: this.getAttribute("date"), content: [] };
+
         let box = this.shadowRoot.querySelector(".box");
+
+        saveButton.addEventListener("click", () => {
+            finalValue = { date: this.getAttribute("date"), content: [] };
+            for (let index = 1; index < box.children.length - 1; index++) {
+                const item = box.children[index];
+                const description = item.querySelector(".description").value;
+                const time = item.querySelector(".time").value;
+                const classType = item.querySelector(".class").value;
+                if (description !== "" && time !== "" && classType !== "") {
+                    finalValue.content.push({
+                        description,
+                        classType,
+                        time
+                    })
+                }
+            }
+
+            console.log(finalValue);
+        });
+
         let inputsElement = this.shadowRoot.querySelector(".boxInput");
         let inputsElementEmpty = inputsElement.cloneNode(true);
         let previous = null;
