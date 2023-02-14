@@ -6,11 +6,21 @@ export default class RepaAttendance extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("attendance.css", import.meta.url);
         this.useTemplate("/components/repa/attendance/attendance.html");
+        this.closeCallback = () => {};
+    }
+
+    close(callback) {
+        this.closeCallback = callback;
     }
 
     load = () => {
+        const closeElement = this.shadowRoot.querySelector(".close");
         const weekText = this.shadowRoot.querySelector(".week");
         const dateText = this.shadowRoot.querySelector(".date");
+
+        closeElement.addEventListener("click", () => {
+            this.closeCallback();
+        });
 
         if(this.getAttribute("week")) {
             weekText.textContent = "Week " + this.getAttribute("week"); 
@@ -19,7 +29,6 @@ export default class RepaAttendance extends BaseComponent {
         if(this.getAttribute("date")) {
             dateText.textContent = this.getAttribute("date"); 
         }
-
 
         let box = this.shadowRoot.querySelector(".box");
         let inputsElement = this.shadowRoot.querySelector(".boxInput");

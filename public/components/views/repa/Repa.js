@@ -16,16 +16,29 @@ export default class MarbleRepa extends BaseComponent {
         const calendar = this.shadowRoot.querySelector("marble-repa-calendar");
         let map = new Map();
 
-        calendar.selected(({ selected, range, month, year }) => {
+        calendar.selected(({ selected, range, month, year, selectedElements, rangeElements }) => {
             const all = range.length ? range : selected;
 
-            all.forEach(item => {
+            all.forEach((item, index) => {
                 if (!map.has(`${item} ${month} ${year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
                     map.set(`${item} ${month} ${year}`, newAttendance);
+                    
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item}. ${monthNames[month]} ${year}`);
                     mainElement.appendChild(newAttendance);
+
+                    newAttendance.close(() => {
+                        const all = rangeElements.length > 0 ? rangeElements : selectedElements;
+                        const index = all.findIndex(allItem => allItem.textContent === item);
+
+                        let target = all[index];
+                        if(target.classList.contains("root")) {
+                            target = target.children[0];
+                        }
+
+                        calendar.removeSelection({target});
+                    });
                 }
             });
 

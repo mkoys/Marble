@@ -109,3 +109,11 @@ input {
 .closeIcon > path {
     fill: rgb(200, 200, 200);
 }
+
+.closeIcon {
+    cursor: pointer;
+}
+
+.closeIcon:hover > path {
+    fill: rgb(255, 255, 255);
+}
