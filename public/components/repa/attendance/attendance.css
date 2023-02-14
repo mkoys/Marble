@@ -9,6 +9,7 @@
 }
 
 .boxHeader {
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,7 +29,7 @@
 }
 
 .boxInput {
-    margin-top: 15px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
 }

@@ -77,10 +77,13 @@ export default class RepaAttendance extends BaseComponent {
                     previous = null;
                 }
 
+                checkBefore();
+
                 inputsElement = current.inputsElement;
                 description = inputsElement.querySelector(".description");
                 time = inputsElement.querySelector(".time");
                 classType = inputsElement.querySelector(".class");
+                description.focus();
 
                 description.addEventListener("input", () => checkNext());
                 time.addEventListener("input", () => checkNext());
