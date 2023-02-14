@@ -43,10 +43,12 @@
 }
 
 .time {
+    text-align: center;
     width: 80px;
 }
 
 .class {
+    text-align: center;
     width: 80px;
 }
 
