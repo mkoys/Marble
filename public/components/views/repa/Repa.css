@@ -10,6 +10,7 @@ main {
 }
 
 .main {
+    padding-bottom: 20px;
     width: calc(100% - 296px);
     margin-left: 296px;
     display: flex;

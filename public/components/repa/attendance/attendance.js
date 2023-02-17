@@ -19,6 +19,26 @@ export default class RepaAttendance extends BaseComponent {
         const dateText = this.shadowRoot.querySelector(".date");
         const buttonMenu = this.shadowRoot.querySelector(".buttons");
         const saveButton = this.shadowRoot.querySelector(".save");
+        const moreButton = this.shadowRoot.querySelector(".more");
+        const moreTooltip = this.shadowRoot.querySelector(".tooltipMore");
+
+        let leaving = false;
+        let clear = false;
+        moreButton.addEventListener("mouseenter", (e) => {
+            leaving = true;
+            clear = setTimeout(() => {
+                moreTooltip.classList.remove("closed");
+                leaving = false;
+            }, 500);
+        });
+
+        moreButton.addEventListener("mouseleave", (e) => {
+            if (leaving) {
+                clearTimeout(clear);
+            }
+            
+            moreTooltip.classList.add("closed");
+        });
 
         if (this.getAttribute("nobutton")) {
             buttonMenu.classList.add("hideMenu");
