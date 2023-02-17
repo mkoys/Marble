@@ -36,13 +36,19 @@ export default class RepaCalendar extends BaseComponent {
                 console.log("1")
             })
 
-            const years = ["2024", "2025", "2026"];
+            let startOfYears = 2000;
+            let currentYear = currentDate.getFullYear();
+            const arrYears = new Array(1000).fill(null).map(() => startOfYears++);
+
+            let arrIndex = arrYears.indexOf(currentYear);
+            let finalArrOfYears = arrYears.slice(arrIndex - 5, arrIndex + 5);
+
             let text = "";
-            for (let i = 0; i < years.length; i++) {
+            for (let i = 0; i < finalArrOfYears.length; i++) {
                 const para = document.createElement("li");
                 para.classList.add("menuItem");
                 const element = this.shadowRoot.querySelector(".menu");
-                text = years[i];
+                text = finalArrOfYears[i];
                 para.textContent = text;
                 element.appendChild(para);
             }
