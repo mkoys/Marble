@@ -134,3 +134,26 @@
 .currentDate {
     border: 1px solid white;
 }
+
+
+.dropdown {
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+.menu {
+    list-style-type: none;
+    position: absolute;
+}
+
+.menuItem {
+    text-decoration: none;
+    color:rgb(200, 200, 200);
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}

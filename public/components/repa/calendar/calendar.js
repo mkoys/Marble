@@ -8,11 +8,12 @@ export default class RepaCalendar extends BaseComponent {
         this.useTemplate("/components/repa/calendar/calendar.html");
         this.currentSelect = [];
         this.rangeSelected = [];
-        this.selectedCallback = () => {}
+        this.selectedCallback = () => { }
         let currentDate = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
         this.load = () => {
+
             const nextElement = this.shadowRoot.querySelector(".next");
             const backElement = this.shadowRoot.querySelector(".back");
 
@@ -27,6 +28,33 @@ export default class RepaCalendar extends BaseComponent {
             });
 
             this.renderCalendar(currentDate);
+            
+            let downArrow = this.shadowRoot.querySelector('.downArrow')
+            downArrow.addEventListener('click', (e) => {
+                let dropdown = this.shadowRoot.querySelector('.dropdown')
+                dropdown.classList.toggle("hidden")
+                console.log("1")
+            })
+
+            const years = ["2024", "2025", "2026"];
+            let text = "";
+            for (let i = 0; i < years.length; i++) {
+                const para = document.createElement("li");
+                para.classList.add("menuItem");
+                const element = this.shadowRoot.querySelector(".menu");
+                text = years[i];
+                para.textContent = text;
+                element.appendChild(para);
+            }
+
+            let dropdown = this.shadowRoot.querySelector('.dropdown')
+            dropdown.addEventListener('click', (e) => {
+                if (dropdown.classList.contains('closed')) {
+                    dropdown.classList.remove('closed')
+                } else {
+                    dropdown.classList.add('closed')
+                }
+            })
         }
 
         this.renderCalendar = (date) => {
@@ -72,11 +100,11 @@ export default class RepaCalendar extends BaseComponent {
                 dateElement.appendChild(root);
 
                 root.addEventListener("click", (event) => {
-                    if(event.target.classList.contains("root")) {
+                    if (event.target.classList.contains("root")) {
                         return;
                     }
 
-                    if(this.rangeSelected) {
+                    if (this.rangeSelected) {
                         this.rangeSelected.forEach(item => {
                             item.classList.remove("rangeEnd");
                             item.classList.remove("rangeStart");
@@ -85,31 +113,31 @@ export default class RepaCalendar extends BaseComponent {
                         this.rangeSelected = [];
                     }
 
-                    if(this.currentSelect.length == 0) {
+                    if (this.currentSelect.length == 0) {
                         this.currentSelect.push(event.target);
                         event.target.classList.toggle("selected");
-                    }else {
+                    } else {
                         const index = this.currentSelect.indexOf(event.target);
-                        if(index > -1) {
+                        if (index > -1) {
                             event.target.classList.toggle("selected");
                             this.currentSelect.splice(index, 1);
-                        }else if(event.ctrlKey) {
+                        } else if (event.ctrlKey) {
                             event.target.classList.toggle("selected");
                             this.currentSelect.push(event.target);
-                        }else if(event.shiftKey && this.currentSelect.length == 1) {
+                        } else if (event.shiftKey && this.currentSelect.length == 1) {
                             const dates = this.shadowRoot.querySelector(".dates");
                             let start = false;
-                            for(const child of dates.children) {
-                                if(start) {
+                            for (const child of dates.children) {
+                                if (start) {
                                     this.rangeSelected.push(child);
-                                    if(child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
+                                    if (child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
                                         start = false;
                                         child.classList.add("rangeEnd");
-                                    }else {
+                                    } else {
                                         child.classList.add("range");
                                     }
-                                }else {
-                                    if(child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
+                                } else {
+                                    if (child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
                                         this.rangeSelected.push(child);
                                         child.classList.add("rangeStart");
                                         start = true;
@@ -118,7 +146,7 @@ export default class RepaCalendar extends BaseComponent {
                             }
                             event.target.classList.toggle("selected");
                             this.currentSelect.push(event.target);
-                        }else {
+                        } else {
                             this.currentSelect.forEach(item => {
                                 item.classList.toggle("selected");
                             });
