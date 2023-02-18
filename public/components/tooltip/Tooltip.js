@@ -15,7 +15,8 @@ export default class MarbleTooltip extends BaseComponent {
 
         tooltip.textContent = text;
 
-        tooltip.style.left = `${this.getAttribute("left") || 0}px`;
+        tooltip.style.top = `${this.getAttribute("top") + "px" || undefined}`;
+        tooltip.style.left = `${this.getAttribute("left") + "px" || undefined}`;
 
         let leaving = false;
         let clear = false;

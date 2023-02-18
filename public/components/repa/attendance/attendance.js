@@ -23,6 +23,7 @@ export default class RepaAttendance extends BaseComponent {
         const submitButton = this.shadowRoot.querySelector(".submit");
         const saveButton = this.shadowRoot.querySelector(".save");
 
+        const closeTooltip = this.shadowRoot.querySelector(".tooltipClose");
         const moreTooltip = this.shadowRoot.querySelector(".tooltipMore");
         const submitTooltip = this.shadowRoot.querySelector(".tooltipSubmit");
         const saveTooltip = this.shadowRoot.querySelector(".tooltipSave");
@@ -31,16 +32,19 @@ export default class RepaAttendance extends BaseComponent {
         const companyCheckbox = this.shadowRoot.querySelector(".company");
 
         schoolCheckbox.addEventListener("click", (e) => {
-            if(e.target.checked && companyCheckbox.checked) {
+            if (e.target.checked && companyCheckbox.checked) {
                 companyCheckbox.action();
             }
         })
 
         companyCheckbox.addEventListener("click", (e) => {
-            if(e.target.checked && schoolCheckbox.checked) {
+            if (e.target.checked && schoolCheckbox.checked) {
                 schoolCheckbox.action();
             }
         })
+
+        closeElement.addEventListener("mouseenter", () => closeTooltip.open());
+        closeElement.addEventListener("mouseleave", () => closeTooltip.close());
 
         moreButton.addEventListener("mouseenter", () => moreTooltip.open());
         moreButton.addEventListener("mouseleave", () => moreTooltip.close());

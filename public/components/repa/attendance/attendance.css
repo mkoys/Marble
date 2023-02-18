@@ -9,7 +9,7 @@
 }
 
 .boxHeader {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -30,7 +30,9 @@
 }
 
 .boxInput {
-    margin-top: 10px;
+    background-color: #151515;
+    padding-top: 5px;
+    padding-bottom: 5px;
     display: flex;
     align-items: center;
 }
@@ -67,7 +69,7 @@ input {
 }
 
 .boxOptions {
-    margin-top: 15px;
+    margin-top: 5px;
     display: flex;
     justify-content: space-between;
 }
@@ -122,6 +124,10 @@ input {
 
 .closeIcon:hover > path {
     fill: rgb(255, 255, 255);
+}
+
+.close {
+    position: relative;
 }
 
 .hide {
