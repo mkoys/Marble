@@ -18,27 +18,23 @@ export default class RepaAttendance extends BaseComponent {
         const weekText = this.shadowRoot.querySelector(".week");
         const dateText = this.shadowRoot.querySelector(".date");
         const buttonMenu = this.shadowRoot.querySelector(".buttons");
-        const saveButton = this.shadowRoot.querySelector(".save");
+
         const moreButton = this.shadowRoot.querySelector(".more");
+        const submitButton = this.shadowRoot.querySelector(".submit");
+        const saveButton = this.shadowRoot.querySelector(".save");
+
         const moreTooltip = this.shadowRoot.querySelector(".tooltipMore");
+        const submitTooltip = this.shadowRoot.querySelector(".tooltipSubmit");
+        const saveTooltip = this.shadowRoot.querySelector(".tooltipSave");
 
-        let leaving = false;
-        let clear = false;
-        moreButton.addEventListener("mouseenter", (e) => {
-            leaving = true;
-            clear = setTimeout(() => {
-                moreTooltip.classList.remove("closed");
-                leaving = false;
-            }, 500);
-        });
+        moreButton.addEventListener("mouseenter", () => moreTooltip.open());
+        moreButton.addEventListener("mouseleave", () => moreTooltip.close());
 
-        moreButton.addEventListener("mouseleave", (e) => {
-            if (leaving) {
-                clearTimeout(clear);
-            }
-            
-            moreTooltip.classList.add("closed");
-        });
+        submitButton.addEventListener("mouseenter", () => submitTooltip.open());
+        submitButton.addEventListener("mouseleave", () => submitTooltip.close());
+
+        saveButton.addEventListener("mouseenter", () => saveTooltip.open());
+        saveButton.addEventListener("mouseleave", () => saveTooltip.close());
 
         if (this.getAttribute("nobutton")) {
             buttonMenu.classList.add("hideMenu");

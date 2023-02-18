@@ -74,28 +74,13 @@ input {
 
 
 .buttons {
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.tooltip {
-    left: 15px;
-    top: 53px;
-    position: absolute;
-    background-color: black;
-    color: white;
-    padding: 5px;
-    font-size: 12px;
-    border-radius: 4px;
-}
-
-.closed {
-    display: none;
-}
-
 .button {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
