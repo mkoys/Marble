@@ -87,8 +87,13 @@ input {
     margin-left: 10px;
     width: 46px;
     height: 46px;
-    background-color: rgb(var(--main-color));
+    background-color: rgba(var(--main-color), 0.7);
     border-radius: 4px;
+    transition: 0.2s ease background-color;
+}
+
+.button:hover {
+    background-color: rgba(var(--main-color), 1);
 }
 
 .check {
