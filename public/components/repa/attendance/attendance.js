@@ -27,6 +27,21 @@ export default class RepaAttendance extends BaseComponent {
         const submitTooltip = this.shadowRoot.querySelector(".tooltipSubmit");
         const saveTooltip = this.shadowRoot.querySelector(".tooltipSave");
 
+        const schoolCheckbox = this.shadowRoot.querySelector(".school");
+        const companyCheckbox = this.shadowRoot.querySelector(".company");
+
+        schoolCheckbox.addEventListener("click", (e) => {
+            if(e.target.checked && companyCheckbox.checked) {
+                companyCheckbox.action();
+            }
+        })
+
+        companyCheckbox.addEventListener("click", (e) => {
+            if(e.target.checked && schoolCheckbox.checked) {
+                schoolCheckbox.action();
+            }
+        })
+
         moreButton.addEventListener("mouseenter", () => moreTooltip.open());
         moreButton.addEventListener("mouseleave", () => moreTooltip.close());
 
