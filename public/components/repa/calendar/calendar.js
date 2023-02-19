@@ -6,10 +6,12 @@ export default class RepaCalendar extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("calendar.css", import.meta.url);
         this.useTemplate("/components/repa/calendar/calendar.html");
+        this.current = [];
         this.currentSelect = [];
         this.rangeSelected = [];
+        this.changeCallback = () => {}
         this.selectedCallback = () => { }
-        let currentDate = new Date();
+        this.currentDate = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
         this.load = () => {
@@ -17,16 +19,24 @@ export default class RepaCalendar extends BaseComponent {
             const backElement = this.shadowRoot.querySelector(".back");
 
             nextElement.addEventListener("click", () => {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                this.renderCalendar(currentDate);
+                this.current = [];
+                this.currentSelect = [];
+                this.rangeSelected = [];
+                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                this.renderCalendar(this.currentDate);
+                this.changeCallback();
             });
 
             backElement.addEventListener("click", () => {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                this.renderCalendar(currentDate);
+                this.current = [];
+                this.currentSelect = [];
+                this.rangeSelected = [];
+                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                this.renderCalendar(this.currentDate);
+                this.changeCallback();
             });
 
-            this.renderCalendar(currentDate);
+            this.renderCalendar(this.currentDate);
         }
 
         this.removeSelection = (event) => {
@@ -44,6 +54,7 @@ export default class RepaCalendar extends BaseComponent {
                     item.classList.remove("rangeStart");
                     item.classList.remove("range");
                 });
+                this.current = []
                 this.rangeSelected = [];
                 this.currentSelect.forEach(item => {
                     item.classList.toggle("selected");
@@ -53,29 +64,40 @@ export default class RepaCalendar extends BaseComponent {
 
                 if (this.currentSelect.length == 0) {
                     this.currentSelect.push(event.target);
+                    this.current.push({ element: event.target, day: event.target.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
                     event.target.classList.toggle("selected");
                 } else {
                     const index = this.currentSelect.indexOf(event.target);
                     if (index > -1) {
                         event.target.classList.toggle("selected");
+                        const selectedIndex = this.current.findIndex(v => v.day === this.currentSelect[index].textContent && v.month === this.currentDate.getMonth())
+                        this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
                         this.currentSelect.splice(index, 1);
                     } else if (event.ctrlKey) {
                         event.target.classList.toggle("selected");
+                        this.current.push({ element: event.target, day: event.target.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
                         this.currentSelect.push(event.target);
                     } else if (event.shiftKey && this.currentSelect.length == 1) {
                         const dates = this.shadowRoot.querySelector(".dates");
                         let start = false;
                         for (const child of dates.children) {
                             if (start) {
+                                this.current.push({ element: child, day: child.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
                                 this.rangeSelected.push(child);
                                 if (child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
                                     start = false;
                                     child.classList.add("rangeEnd");
+                                    const selectedIndex = this.current.findIndex(v => v.day === child.textContent && v.month === this.currentDate.getMonth())
+                                    this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
+                                    this.current.push({ element: child, day: child.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
                                 } else {
                                     child.classList.add("range");
                                 }
                             } else {
                                 if (child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
+                                    const selectedIndex = this.current.findIndex(v => v.day === child.textContent && v.month === this.currentDate.getMonth())
+                                    this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
+                                    this.current.push({ element: child, day: child.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
                                     this.rangeSelected.push(child);
                                     child.classList.add("rangeStart");
                                     start = true;
@@ -87,9 +109,13 @@ export default class RepaCalendar extends BaseComponent {
                     } else {
                         this.currentSelect.forEach(item => {
                             item.classList.toggle("selected");
+                            const selectedIndex = this.current.findIndex(v => v.day === item.textContent && v.month === this.currentDate.getMonth())
+                            this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
+
                         });
                         this.currentSelect = [];
                         event.target.classList.toggle("selected");
+                        this.current.push({ element: event.target, day: event.target.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
                         this.currentSelect.push(event.target);
                     }
                 }
@@ -100,7 +126,11 @@ export default class RepaCalendar extends BaseComponent {
             this.currentSelect.forEach(item => selected.push(item.textContent));
             const range = [];
             this.rangeSelected.forEach(item => range.push(item.textContent));
-            this.selectedCallback({ selected, range, month: currentDate.getMonth(), year: currentDate.getFullYear(), selectedElements: this.currentSelect, rangeElements: this.rangeSelected });
+            this.selectedCallback({ selected, range, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear(), selectedElements: this.currentSelect, rangeElements: this.rangeSelected });
+        }
+
+        this.clickDate = (date) => {
+            console.log(date);
         }
 
         this.renderCalendar = (date) => {

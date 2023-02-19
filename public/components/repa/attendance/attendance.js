@@ -55,6 +55,9 @@ export default class RepaAttendance extends BaseComponent {
         saveButton.addEventListener("mouseenter", () => saveTooltip.open());
         saveButton.addEventListener("mouseleave", () => saveTooltip.close());
 
+        let box = this.shadowRoot.querySelector(".box");
+        let finalValue = { date: this.getAttribute("date"), content: [] };
+
         if (this.getAttribute("nobutton")) {
             buttonMenu.classList.add("hideMenu");
         }
@@ -75,18 +78,14 @@ export default class RepaAttendance extends BaseComponent {
             dateText.textContent = this.getAttribute("date");
         }
 
-        let finalValue = { date: this.getAttribute("date"), content: [] };
-
-        let box = this.shadowRoot.querySelector(".box");
-
-        saveButton.addEventListener("click", () => {
+        this.data = () => {
             finalValue = { date: this.getAttribute("date"), content: [] };
             for (let index = 1; index < box.children.length - 1; index++) {
                 const item = box.children[index];
                 const description = item.querySelector(".description").value;
                 const time = item.querySelector(".time").value;
                 const classType = item.querySelector(".class").value;
-                if (description !== "" && time !== "" && classType !== "") {
+                if (description !== "" || time !== "" || classType !== "") {
                     finalValue.content.push({
                         description,
                         classType,
@@ -95,7 +94,13 @@ export default class RepaAttendance extends BaseComponent {
                 }
             }
 
-            console.log(finalValue);
+            return finalValue;
+        }
+
+
+        saveButton.addEventListener("click", () => {
+            const data = this.data();
+            console.log(data);
         });
 
         let inputsElement = this.shadowRoot.querySelector(".boxInput");
