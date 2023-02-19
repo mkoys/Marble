@@ -36,18 +36,21 @@ export default class MarbleRepa extends BaseComponent {
                     newAttendance.close(async () => {
                         this.map.delete(`${item.day} ${item.month} ${item.year}`);
                         newAttendance.remove();
-                        calendar.open(item, false, false);
+                        calendar.open(item, false, false)
                     });
                 }
             });
             this.checkMapped(selected, range);
         });
 
+        calendar.close = (close) => {
+            close();
+        }
+
         this.checkMapped = (selected, range = false) => {
             let index = 0;
             this.map.forEach(async (item, key) => {
-
-                if(range && index !== 0) {
+                if (range && index !== 0) {
                     item.setAttribute("noclose", "true")
                 }
 
@@ -55,8 +58,10 @@ export default class MarbleRepa extends BaseComponent {
                     item.remove();
                     this.map.delete(key);
                 }
+
                 index++;
             })
+
         }
     }
 }

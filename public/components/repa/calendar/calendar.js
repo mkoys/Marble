@@ -10,11 +10,12 @@ export default class RepaCalendar extends BaseComponent {
         this.currentDate = new Date();
         this.monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-        this.nextMonth = () => {}
-        this.change = () => {}
+        this.nextMonth = () => { }
+        this.change = () => { }
+        this.close = () => { }
         this.selected = [];
         this.range = false;
-        
+
         this.load = () => {
             const nextElement = this.shadowRoot.querySelector(".next");
             const backElement = this.shadowRoot.querySelector(".back");
@@ -57,31 +58,37 @@ export default class RepaCalendar extends BaseComponent {
                 if (this.selected.length == 0) {
                     found.children[0].classList.add("selected");
                     this.selected.push(date);
-                }else if(this.range) {
-                    this.range = false;
-                    this.selected = [];
-
-                    for(const child of  dateElement.children) {
-                        child.classList.remove("range", "rangeStart", "rangeEnd");
-                        child.children[0].classList.remove("selected");
-                    }
-                }else if(found.children[0].classList.contains("selected")) {
-                    found.children[0].classList.remove("selected");
-                    const dateIndex = this.selected.findIndex(value => value.day === date.day);
-                    this.selected.splice(dateIndex, dateIndex > -1 ? 1 : 0);
-                }else if (multiple) {
-                    found.children[0].classList.add("selected");
-                    this.selected.push(date);
-                }else if (scope) {
-                    if(this.selected.length > 1) {
+                } else if (this.range) {
+                    this.close(() => {
                         this.range = false;
                         this.selected = [];
 
-                        for(const child of  dateElement.children) {
+                        for (const child of dateElement.children) {
                             child.classList.remove("range", "rangeStart", "rangeEnd");
                             child.children[0].classList.remove("selected");
                         }
-                    }else {
+                    });
+                } else if (found.children[0].classList.contains("selected")) {
+                    this.close(() => {
+                        found.children[0].classList.remove("selected");
+                        const dateIndex = this.selected.findIndex(value => value.day === date.day);
+                        this.selected.splice(dateIndex, dateIndex > -1 ? 1 : 0);
+                    });
+                } else if (multiple) {
+                    found.children[0].classList.add("selected");
+                    this.selected.push(date);
+                } else if (scope) {
+                    if (this.selected.length > 1) {
+                        this.close(() => {
+                            this.range = false;
+                            this.selected = [];
+
+                            for (const child of dateElement.children) {
+                                child.classList.remove("range", "rangeStart", "rangeEnd");
+                                child.children[0].classList.remove("selected");
+                            }
+                        });
+                    } else {
                         this.range = true;
 
                         const beforeIndex = foundIndex;
@@ -94,43 +101,45 @@ export default class RepaCalendar extends BaseComponent {
                                 nextIndex = index;
                             }
                         }
-                        
+
                         let startIndex = nextIndex < beforeIndex ? nextIndex : beforeIndex;
                         let endIndex = (nextIndex < beforeIndex ? beforeIndex : nextIndex) + 1;
-                        
+
                         for (let index = startIndex; index < endIndex; index++) {
                             const element = dateElement.children[index];
                             rangeElements.push(element);
                         }
                         this.selected = [];
-                        
-                        for (let index = 0; index < rangeElements.length; index++) {    
-                            const element = rangeElements[index];
-                            this.selected.push({day: element.textContent, month: date.month, year: date.year});
 
-                            if(index == 0) {
+                        for (let index = 0; index < rangeElements.length; index++) {
+                            const element = rangeElements[index];
+                            this.selected.push({ day: element.textContent, month: date.month, year: date.year });
+
+                            if (index == 0) {
                                 element.classList.add("rangeStart");
                                 element.children[0].classList.add("selected");
-                            }else if(index == rangeElements.length - 1) {
+                            } else if (index == rangeElements.length - 1) {
                                 element.classList.add("rangeEnd");
                                 element.children[0].classList.add("selected");
-                            }else {
+                            } else {
                                 element.classList.add("range");
                             }
                         }
                     }
-                }else {
-                    this.range = false;
-                    this.selected = [];
+                } else {
+                    this.close(() => {
+                        this.range = false;
+                        this.selected = [];
 
-                    for(const child of  dateElement.children) {
-                        child.classList.remove("range", "rangeStart", "rangeEnd");
-                        child.children[0].classList.remove("selected");
-                    }
-                    this.open(date, false, false);
+                        for (const child of dateElement.children) {
+                            child.classList.remove("range", "rangeStart", "rangeEnd");
+                            child.children[0].classList.remove("selected");
+                        }
+                        this.open(date, false, false);
+                    });
                 }
 
-                if(trigger) {
+                if (trigger) {
                     this.change(this.selected, this.range);
                 }
             }
