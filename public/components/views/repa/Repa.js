@@ -7,6 +7,7 @@ export default class MarbleRepa extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("Repa.css", import.meta.url);
         this.useTemplate("/components/views/repa/Repa.html");
+        this.map = new Map();
     }
 
     load = () => {
@@ -16,91 +17,41 @@ export default class MarbleRepa extends BaseComponent {
         const alert = this.shadowRoot.querySelector(".alert");
         const save = alert.querySelector(".save");
         const discard = alert.querySelector(".discard");
-        let map = new Map();
 
         calendar.changeCallback = () => {
-            map = new Map();
+            this.map = new Map();
             mainElement.innerHTML = "";
         }
 
-        calendar.selected(async ({ selected, range, month, year, selectedElements, rangeElements }) => {
-            const all = range.length ? range : selected;
-            const rangeFlag = range.length ? true : false;
-            for (let index = 0; index < all.length; index++) {
-                const item = all[index];
-                if (!map.has(`${item} ${month} ${year}`)) {
+        calendar.change = ((selected) => {
+            selected.forEach(item => {
+                if (!this.map.has(`${item.day} ${item.month} ${item.year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
-                    map.set(`${item} ${month} ${year}`, newAttendance);
+                    this.map.set(`${item.day} ${item.month} ${item.year}`, newAttendance);
 
                     newAttendance.setAttribute("week", "None");
-                    newAttendance.setAttribute("date", `${item}. ${monthNames[month]} ${year}`);
+                    newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);
                     mainElement.appendChild(newAttendance);
 
-                    newAttendance.close(async () => {
-                        const all = rangeElements.length > 0 ? rangeElements : selectedElements;
-                        const index = all.findIndex(allItem => allItem.textContent === item);
-
-                        let target = all[index];
-                        if (target.classList.contains("root")) {
-                            target = target.children[0];
-                        }
-
-                        calendar.removeSelection({ target });
-                    });
-                }
-            }
-
-            let rangeCloseDone = true;
-            let last = null;
-            map.forEach(async (value, key) => {
-                last = value;
-                let found = false;
-
-                all.forEach(item => {
-                    if (key === `${item} ${month} ${year}`) {
-                        found = true;
-                    }
-                });
-
-
-                if (!rangeCloseDone && rangeFlag) {
-                    value.setAttribute("noclose", "true");
-                    //value.setAttribute("nobutton", "true");
-                } else if (rangeFlag) {
-                    rangeCloseDone = false;
-                }
-
-                if (!found) {
-                    const attendance = value.data();
-
-                    if (attendance.content.length) {
-                        alert.classList.remove("closed");
-                        await new Promise((resolve, reject) => {
-                            const resolveRequest = () => { 
-                                save.removeEventListener("click", resolveRequest);
-                                discard.removeEventListener("click", rejectRequest);
-                                calendar.clickDate(value.getAttribute("date"));
-                                resolve() 
-                            }
-                            const rejectRequest = () => { 
-                                console.log(value);
-                                mainElement.removeChild(value);
-                                map.delete(key);
-                                save.removeEventListener("click", resolveRequest);
-                                discard.removeEventListener("click", rejectRequest);
-                                resolve() 
-                            }
-                            save.addEventListener("click", resolveRequest);
-                            discard.addEventListener("click", rejectRequest);
-                        })
-                        alert.classList.add("closed");
-                    }else {
-                        mainElement.removeChild(value);
-                        map.delete(key);
-                    }
-
+                    newAttendance.close(() => {
+                        this.map.delete(`${item.day} ${item.month} ${item.year}`);
+                        newAttendance.remove();
+                        calendar.open(item, false, false);
+                    })
                 }
             });
+
+            this.checkMapped(selected);
+
         });
+
+        this.checkMapped = (selected) => {
+            this.map.forEach((item, key) => {
+                if(selected.findIndex(value => key === `${value.day} ${value.month} ${value.year}`) == -1) {
+                    item.remove();
+                    this.map.delete(key);
+                }
+            })
+        }
     }
 }

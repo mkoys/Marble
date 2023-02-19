@@ -6,10 +6,11 @@ export default class RepaCalendar extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("calendar.css", import.meta.url);
         this.useTemplate("/components/repa/calendar/calendar.html");
-        this.current = [];
-        this.currentSelect = [];
-        this.rangeSelected = [];
-        this.changeCallback = () => {}
+        this.change = () => {}
+        this.selected = [];
+        this.range = false;
+        this.closeCallback = () => { }
+        this.changeCallback = () => { }
         this.selectedCallback = () => { }
         this.currentDate = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -19,7 +20,7 @@ export default class RepaCalendar extends BaseComponent {
             const backElement = this.shadowRoot.querySelector(".back");
 
             nextElement.addEventListener("click", () => {
-                this.current = [];
+                this.selected = [];
                 this.currentSelect = [];
                 this.rangeSelected = [];
                 this.currentDate.setMonth(this.currentDate.getMonth() + 1);
@@ -28,7 +29,7 @@ export default class RepaCalendar extends BaseComponent {
             });
 
             backElement.addEventListener("click", () => {
-                this.current = [];
+                this.selected = [];
                 this.currentSelect = [];
                 this.rangeSelected = [];
                 this.currentDate.setMonth(this.currentDate.getMonth() - 1);
@@ -39,94 +40,97 @@ export default class RepaCalendar extends BaseComponent {
             this.renderCalendar(this.currentDate);
         }
 
-        this.removeSelection = (event) => {
-            this.elementTraget(event);
-        }
+        this.open = (date, multiple = false, scope = false) => {
 
-        this.elementTraget = (event) => {
-            if (event.target.classList.contains("root")) {
-                return;
-            }
+            const dateElement = this.shadowRoot.querySelector(".dates"); // Dates root
 
-            if (this.rangeSelected.length > 0) {
-                this.rangeSelected.forEach(item => {
-                    item.classList.remove("rangeEnd");
-                    item.classList.remove("rangeStart");
-                    item.classList.remove("range");
-                });
-                this.current = []
-                this.rangeSelected = [];
-                this.currentSelect.forEach(item => {
-                    item.classList.toggle("selected");
-                });
-                this.currentSelect = [];
-            } else {
+            let found = null;
+            let foundIndex = null;
 
-                if (this.currentSelect.length == 0) {
-                    this.currentSelect.push(event.target);
-                    this.current.push({ element: event.target, day: event.target.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
-                    event.target.classList.toggle("selected");
-                } else {
-                    const index = this.currentSelect.indexOf(event.target);
-                    if (index > -1) {
-                        event.target.classList.toggle("selected");
-                        const selectedIndex = this.current.findIndex(v => v.day === this.currentSelect[index].textContent && v.month === this.currentDate.getMonth())
-                        this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
-                        this.currentSelect.splice(index, 1);
-                    } else if (event.ctrlKey) {
-                        event.target.classList.toggle("selected");
-                        this.current.push({ element: event.target, day: event.target.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
-                        this.currentSelect.push(event.target);
-                    } else if (event.shiftKey && this.currentSelect.length == 1) {
-                        const dates = this.shadowRoot.querySelector(".dates");
-                        let start = false;
-                        for (const child of dates.children) {
-                            if (start) {
-                                this.current.push({ element: child, day: child.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
-                                this.rangeSelected.push(child);
-                                if (child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
-                                    start = false;
-                                    child.classList.add("rangeEnd");
-                                    const selectedIndex = this.current.findIndex(v => v.day === child.textContent && v.month === this.currentDate.getMonth())
-                                    this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
-                                    this.current.push({ element: child, day: child.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
-                                } else {
-                                    child.classList.add("range");
-                                }
-                            } else {
-                                if (child.children[0] === event.target || child.children[0] === this.currentSelect[0]) {
-                                    const selectedIndex = this.current.findIndex(v => v.day === child.textContent && v.month === this.currentDate.getMonth())
-                                    this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
-                                    this.current.push({ element: child, day: child.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
-                                    this.rangeSelected.push(child);
-                                    child.classList.add("rangeStart");
-                                    start = true;
-                                }
-                            }
-                        }
-                        event.target.classList.toggle("selected");
-                        this.currentSelect.push(event.target);
-                    } else {
-                        this.currentSelect.forEach(item => {
-                            item.classList.toggle("selected");
-                            const selectedIndex = this.current.findIndex(v => v.day === item.textContent && v.month === this.currentDate.getMonth())
-                            this.current.splice(selectedIndex, selectedIndex > -1 ? 1 : 0);
+            for (let index = 0; index < dateElement.children.length; index++) {
+                const element = dateElement.children[index];
 
-                        });
-                        this.currentSelect = [];
-                        event.target.classList.toggle("selected");
-                        this.current.push({ element: event.target, day: event.target.textContent, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() });
-                        this.currentSelect.push(event.target);
-                    }
+                if (element.textContent == date.day && !element.children[0].classList.contains("nodate")) {
+                    found = element;
+                    foundIndex = index;
                 }
             }
 
+            if (found) {
+                if (this.selected.length == 0) {
+                    found.children[0].classList.add("selected");
+                    this.selected.push(date);
+                }else if(this.range) {
+                    this.range = false;
+                    this.selected = [];
+                    for(const child of  dateElement.children) {
+                        child.classList.remove("range", "rangeStart", "rangeEnd");
+                        child.children[0].classList.remove("selected");
+                    }
+                }else if(found.children[0].classList.contains("selected")) {
+                    found.children[0].classList.remove("selected");
+                    const dateIndex = this.selected.findIndex(value => value.day === date.day);
+                    this.selected.splice(dateIndex, dateIndex > -1 ? 1 : 0);
+                }else if (multiple) {
+                    found.children[0].classList.add("selected");
+                    this.selected.push(date);
+                }else if (scope) {
+                    if(this.selected.length > 1) {
+                        this.range = false;
+                        this.selected = [];
+                        for(const child of  dateElement.children) {
+                            child.classList.remove("range", "rangeStart", "rangeEnd");
+                            child.children[0].classList.remove("selected");
+                        }
+                    }else {
+                        this.range = true;
 
-            const selected = [];
-            this.currentSelect.forEach(item => selected.push(item.textContent));
-            const range = [];
-            this.rangeSelected.forEach(item => range.push(item.textContent));
-            this.selectedCallback({ selected, range, month: this.currentDate.getMonth(), year: this.currentDate.getFullYear(), selectedElements: this.currentSelect, rangeElements: this.rangeSelected });
+                        const beforeIndex = foundIndex;
+                        let nextIndex = null;
+                        let rangeElements = [];
+
+                        for (let index = 0; index < dateElement.children.length; index++) {
+                            const element = dateElement.children[index];
+                            if (element.textContent == this.selected[0].day && !element.children[0].classList.contains("nodate")) {
+                                nextIndex = index;
+                            }
+                        }
+                        
+                        let startIndex = nextIndex < beforeIndex ? nextIndex : beforeIndex;
+                        let endIndex = (nextIndex < beforeIndex ? beforeIndex : nextIndex) + 1;
+                        
+                        for (let index = startIndex; index < endIndex; index++) {
+                            const element = dateElement.children[index];
+                            rangeElements.push(element);
+                        }
+                        this.selected = [];
+                        
+                        for (let index = 0; index < rangeElements.length; index++) {    
+                            const element = rangeElements[index];
+                            this.selected.push({day: element.textContent, month: date.month, year: date.year});
+                            if(index == 0) {
+                                element.classList.add("rangeStart");
+                                element.children[0].classList.add("selected");
+                            }else if(index == rangeElements.length - 1) {
+                                element.classList.add("rangeEnd");
+                                element.children[0].classList.add("selected");
+                            }else {
+                                element.classList.add("range");
+                            }
+                        }
+                    }
+                }else {
+                    this.range = false;
+                    this.selected = [];
+                    for(const child of  dateElement.children) {
+                        child.classList.remove("range", "rangeStart", "rangeEnd");
+                        child.children[0].classList.remove("selected");
+                    }
+                    this.open(date, false, false);
+                }
+
+                this.change(this.selected);
+            }
         }
 
         this.clickDate = (date) => {
@@ -134,55 +138,74 @@ export default class RepaCalendar extends BaseComponent {
         }
 
         this.renderCalendar = (date) => {
-            const dateElement = this.shadowRoot.querySelector(".dates");
-            const dateTextElement = this.shadowRoot.querySelector(".currentText");
+            const dateElement = this.shadowRoot.querySelector(".dates"); // Dates root
+            const dateTextElement = this.shadowRoot.querySelector(".currentText"); // Date text
 
+            // Set date text
             dateTextElement.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`
 
+            // Get days for current set month with tag
             const currentDays = getAllDaysInMonth(date.getFullYear(), date.getMonth(), true);
-            let start = currentDays[0].date.getDay() - 1;
-            start = start < 0 ? start + 7 : start;
 
+            // Get offset for right day start
+            let start = currentDays[0].date.getDay() - 1;
+            start = start < 0 ? start + 7 : start; // Overflow protection
+
+            // Length of days with offset
             const all = currentDays.length + start;
+            // Left days to fill
             const end = 6 * 7 - all;
 
-            const nextDate = new Date();
+            // Next days after month date
+            const nextDate = new Date(date);
             nextDate.setMonth(nextDate.getMonth() + 1);
-
-            const previousDate = new Date();
-            previousDate.setMonth(previousDate.getMonth() - 1);
-
+            // No tag in days generated
             let nextDays = getAllDaysInMonth(nextDate.getFullYear(), nextDate.getMonth(), false);
             nextDays = nextDays.slice(0, end);
 
+            // Next days before month date
+            const previousDate = new Date(date);
+            previousDate.setMonth(previousDate.getMonth() - 1);
+            // Next days after month date
             let previousDays = getAllDaysInMonth(previousDate.getFullYear(), previousDate.getMonth(), false);
             previousDays = previousDays.slice(previousDays.length - start);
 
+            // Remove all dates from date element
             dateElement.innerHTML = "";
 
+            // Concat all days together
             let days = [...previousDays, ...currentDays, ...nextDays];
 
+            // Loop all days
             for (const day of days) {
-                const element = document.createElement("div");
-                const root = document.createElement("div");
-                element.classList.add("date");
-                if (!day.tag) {
-                    element.classList.add("nodate");
-                }
-                this.checkIfCurrentDate(day.date) ? element.classList.add("currentDate") : "";
+                const root = document.createElement("div"); // Date element root
+                const element = document.createElement("div"); // Number element
+
+                root.classList.add("root"); // Root base class
+                element.classList.add("date"); // Date base class
+                // If no tag set nodate class
+                if (!day.tag) { element.classList.add("nodate") }
+                // Add current date class
+                if (this.checkIfCurrentDate(day.date)) { element.classList.add("currentDate") };
+
+                // Set text for date
                 element.textContent = day.date.getDate();
-                root.classList.add("root");
+
+                // Add text to root
                 root.appendChild(element);
+                // Add root to date
                 dateElement.appendChild(root);
 
+                // If has tag add click event listener
                 if (day.tag) {
                     root.addEventListener("click", (event) => {
-                        this.elementTraget(event);
+                        this.open({ day: event.target.textContent, month: date.getMonth(), year: date.getFullYear() }, event.ctrlKey, event.shiftKey);
                     });
                 }
             }
         }
 
+        // Checks if date is current date
         this.checkIfCurrentDate = (date) => {
             if (
                 date.getDate() === new Date().getDate() &&
@@ -195,10 +218,7 @@ export default class RepaCalendar extends BaseComponent {
             }
         }
 
-        this.selected = (callback) => {
-            this.selectedCallback = callback;
-        }
-
+        // Returns all dats in set year with set tag
         function getAllDaysInMonth(year, month, tag) {
             const date = new Date(year, month, 1);
 
