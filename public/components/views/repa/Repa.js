@@ -25,37 +25,59 @@ export default class MarbleRepa extends BaseComponent {
         }
 
         this.closing = async (value) => {
-            alert.classList.remove("closed");
             const alertText = alert.querySelector(".alertHeaderText");
             
-            if(Array.isArray(value)) {
-                if(value.length == 1) {
-                    alertText.textContent = `Close ${value[0].day}. ${monthNames[value[0].month]} ${value[0].year} card?` 
-                }else {
-                    alertText.textContent = `Close all cards?` 
+            let final = [];
+            
+            if (Array.isArray(value)) {
+                final = value;
+                if (value.length == 1) {
+                    alertText.textContent = `Close ${value[0].day}. ${monthNames[value[0].month]} ${value[0].year} card?`
+                } else {
+                    alertText.textContent = `Close all cards?`
                 }
-            }else if (value) { 
-                alertText.textContent = `Close ${value.day}. ${monthNames[value.month]} ${value.year} card?` 
+            } else if (value) {
+                final.push(value);
+                alertText.textContent = `Close ${value.day}. ${monthNames[value.month]} ${value.year} card?`
             };
+            
+            let prompt = false;
 
-            const result = await new Promise(resolve => {
-                function yes() {
-                    alert.classList.add("closed");
-                    save.removeEventListener("click", yes);
-                    discard.removeEventListener("click", no);
-                    resolve(false);
+            for (let index = 0; index < mainElement.children.length; index++) {
+                const element = mainElement.children[index];
+                const indexFinal = final.findIndex(value => element.getAttribute("date") === `${value.day}. ${monthNames[value.month]} ${value.year}`)
+                if(indexFinal > -1) {
+                   const data = element.data();
+                    if(data.content.length > 0) {
+                        prompt = true;
+                    }
                 }
-                function no() {
-                    alert.classList.add("closed");
-                    save.removeEventListener("click", yes);
-                    discard.removeEventListener("click", no);
-                    resolve(true);
-                }
-                save.addEventListener("click", yes);
-                discard.addEventListener("click", no);
-            });
+            }
 
-            return result;
+            if (prompt) {
+                alert.classList.remove("closed");
+                const result = await new Promise(resolve => {
+                    function yes() {
+                        alert.classList.add("closed");
+                        save.removeEventListener("click", yes);
+                        discard.removeEventListener("click", no);
+                        resolve(false);
+                    }
+                    function no() {
+                        alert.classList.add("closed");
+                        save.removeEventListener("click", yes);
+                        discard.removeEventListener("click", no);
+                        resolve(true);
+                    }
+                    save.addEventListener("click", yes);
+                    discard.addEventListener("click", no);
+                });
+                
+                return result;
+            } else {
+                return true;
+            }
+
         }
 
         calendar.change = ((selected, range) => {
