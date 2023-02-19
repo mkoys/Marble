@@ -103,16 +103,30 @@ export default class MarbleRepa extends BaseComponent {
                 if (!this.map.has(`${item.day} ${item.month} ${item.year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
                     this.map.set(`${item.day} ${item.month} ${item.year}`, newAttendance);
-                    const foundIndex = this.data.findIndex(value => value.date.day == parseInt(item.day) && value.date.month == parseInt(item.month) &&  value.date.year == parseInt(item.year))
-                    if(foundIndex > -1) {
+                    const foundIndex = this.data.findIndex(value => value.date.day == parseInt(item.day) && value.date.month == parseInt(item.month) && value.date.year == parseInt(item.year))
+                    console.log(this.data);
+                    if (foundIndex > -1) {
                         newAttendance.message = this.data[foundIndex];
-                    } 
+                    }
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);
                     mainElement.appendChild(newAttendance);
 
                     newAttendance.save(async () => {
-                        calendar.update();
+                        setTimeout(async () => {                            
+                            const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
+    
+                            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                                method: "POST",
+                                body: JSON.stringify(monthFilter),
+                                headers: {
+                                    authorization: "Bearer " + localStorage.getItem("token")
+                                }
+                            });
+    
+                            this.data = await dataForMonth.json();
+                            calendar.update();
+                        }, 100);
                     });
 
                     newAttendance.close(async () => {

@@ -79,7 +79,6 @@ export default class RepaAttendance extends BaseComponent {
         if (this.message) {
             const bottom = box.children[2];
             box.removeChild(box.children[2]);
-
             this.message.content.forEach(row => {
                 description.value = row.description;
                 time.value = row.time;
