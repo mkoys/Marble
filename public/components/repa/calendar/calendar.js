@@ -16,7 +16,7 @@ export default class RepaCalendar extends BaseComponent {
         this.selected = [];
         this.range = false;
 
-        this.load = () => {
+        this.load = async () => {
             const nextElement = this.shadowRoot.querySelector(".next");
             const backElement = this.shadowRoot.querySelector(".back");
 
@@ -35,6 +35,18 @@ export default class RepaCalendar extends BaseComponent {
                 this.renderCalendar(this.currentDate);
                 this.nextMonth();
             });
+
+            const monthFilter = { date: { month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() } }
+
+            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                method: "POST",
+                body: JSON.stringify(monthFilter),
+                headers: {
+                    authorization: "Bearer " + localStorage.getItem("token")
+                }
+            });
+
+            this.dataForMonthJson = await dataForMonth.json();
 
             this.renderCalendar(this.currentDate);
         }
@@ -145,7 +157,38 @@ export default class RepaCalendar extends BaseComponent {
             }
         }
 
-        this.renderCalendar = (date) => {
+        this.update = async () => {
+            const dateElement = this.shadowRoot.querySelector(".dates");
+
+            const monthFilter = { date: { month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() } }
+            
+            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                method: "POST",
+                body: JSON.stringify(monthFilter),
+                headers: {
+                    authorization: "Bearer " + localStorage.getItem("token")
+                }
+            });
+            
+            this.dataForMonthJson = await dataForMonth.json();
+            
+            for (let index = 0; index < dateElement.children.length; index++) {
+                const element = dateElement.children[index];
+                if(!element.children[0].classList.contains("nodate")) {
+                    const foundIndex = this.dataForMonthJson.findIndex(value => value.date.day == parseInt(element.children[0].children[0].textContent) && value.date.month == this.currentDate.getMonth() && value.date.year == this.currentDate.getFullYear());
+
+                    if(foundIndex > -1) {
+                        const ball = document.createElement("div");
+                        ball.classList.add("saved");
+                        element.children[0].appendChild(ball);
+                    }
+                }
+            }
+            
+        }
+
+        this.renderCalendar = async (date) => {
+            this.update();
             const dateElement = this.shadowRoot.querySelector(".dates"); // Dates root
             const dateTextElement = this.shadowRoot.querySelector(".currentText"); // Date text
 
@@ -187,7 +230,16 @@ export default class RepaCalendar extends BaseComponent {
             // Loop all days
             for (const day of days) {
                 const root = document.createElement("div"); // Date element root
-                const element = document.createElement("div"); // Number element
+                const element = document.createElement("div"); // Circle
+                const elementText = document.createElement("p"); // Text of date
+
+                const dataIndex = this.dataForMonthJson.findIndex(value => value.date.day == day.date.getDate() && value.date.month == day.date.getMonth() && value.date.year == day.date.getFullYear());
+                if(dataIndex > -1) {
+                    const data = this.dataForMonthJson[dataIndex];
+                    const ball = document.createElement("div");
+                    ball.classList.add("saved");
+                    element.appendChild(ball);
+                }
 
                 root.classList.add("root"); // Root base class
                 element.classList.add("date"); // Date base class
@@ -197,8 +249,10 @@ export default class RepaCalendar extends BaseComponent {
                 if (this.checkIfCurrentDate(day.date)) { element.classList.add("currentDate") };
 
                 // Set text for date
-                element.textContent = day.date.getDate();
+                elementText.textContent = day.date.getDate();
 
+                // Add text element
+                element.prepend(elementText);
                 // Add text to root
                 root.appendChild(element);
                 // Add root to date

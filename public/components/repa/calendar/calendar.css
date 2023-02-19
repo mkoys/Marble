@@ -80,6 +80,9 @@
 }
 
 .date {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     border-radius: 50%;
     user-select: none;
     font-size: 14px;
@@ -137,4 +140,13 @@
 
 .currentDate {
     border: 1px solid white;
+}
+
+.saved {
+    bottom: 2px;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgb(var(--secondary-color));
 }

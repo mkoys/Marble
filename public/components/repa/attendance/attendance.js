@@ -7,6 +7,11 @@ export default class RepaAttendance extends BaseComponent {
         this.addStyle("attendance.css", import.meta.url);
         this.useTemplate("/components/repa/attendance/attendance.html");
         this.closeCallback = () => { };
+        this.saveCallback = () => { };
+    }
+
+    save(callback) {
+        this.saveCallback = callback;
     }
 
     close(callback) {
@@ -14,6 +19,7 @@ export default class RepaAttendance extends BaseComponent {
     }
 
     load = () => {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const closeElement = this.shadowRoot.querySelector(".close");
         const weekText = this.shadowRoot.querySelector(".week");
         const dateText = this.shadowRoot.querySelector(".date");
@@ -79,7 +85,8 @@ export default class RepaAttendance extends BaseComponent {
         }
 
         this.data = () => {
-            finalValue = { date: this.getAttribute("date"), content: [] };
+            const splitDate = this.getAttribute("date").split(" ");
+            finalValue = { date: { day: parseInt(splitDate[0].slice(0, splitDate[0].length - 1)), month: monthNames.indexOf(splitDate[1]), year: parseInt(splitDate[2]) }, content: [] };
             for (let index = 1; index < box.children.length - 1; index++) {
                 const item = box.children[index];
                 const description = item.querySelector(".description").value;
@@ -100,7 +107,12 @@ export default class RepaAttendance extends BaseComponent {
 
         saveButton.addEventListener("click", () => {
             const data = this.data();
-            console.log(data);
+            fetch("http://localhost:8000/repa/insert", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { authorization: "Bearer " + localStorage.getItem("token") }
+            });
+            this.saveCallback(data);
         });
 
         let inputsElement = this.shadowRoot.querySelector(".boxInput");

@@ -10,14 +10,26 @@ export default class MarbleRepa extends BaseComponent {
         this.map = new Map();
     }
 
-    load = () => {
+    load = async () => {
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const mainElement = this.shadowRoot.querySelector(".main");
         const calendar = this.shadowRoot.querySelector("marble-repa-calendar");
         const alert = this.shadowRoot.querySelector(".alert");
+        const closeAlert = alert.querySelector(".close");
         const save = alert.querySelector(".save");
         const discard = alert.querySelector(".discard");
-        let attendanceClose = false;
+
+        const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
+
+        const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+            method: "POST",
+            body: JSON.stringify(monthFilter),
+            headers: {
+                authorization: "Bearer " + localStorage.getItem("token")
+            }
+        });
+
+        this.data = await dataForMonth.json();
 
         calendar.nextMonth = () => {
             this.map = new Map();
@@ -62,16 +74,19 @@ export default class MarbleRepa extends BaseComponent {
                         alert.style.opacity = 1;
                         alert.classList.add("closed");
                         save.removeEventListener("click", yes);
+                        closeAlert.removeEventListener("click", yes);
                         discard.removeEventListener("click", no);
                         resolve(false);
                     }
                     function no() {
-                        alert.style.opacity = 0; 
+                        alert.style.opacity = 0;
                         alert.classList.add("closed");
                         save.removeEventListener("click", yes);
+                        closeAlert.removeEventListener("click", yes);
                         discard.removeEventListener("click", no);
                         resolve(true);
                     }
+                    closeAlert.addEventListener("click", yes);
                     save.addEventListener("click", yes);
                     discard.addEventListener("click", no);
                 });
@@ -92,6 +107,10 @@ export default class MarbleRepa extends BaseComponent {
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);
                     mainElement.appendChild(newAttendance);
+
+                    newAttendance.save(async () => {
+                        calendar.update();
+                    });
 
                     newAttendance.close(async () => {
                         calendar.open(item, false, false);
