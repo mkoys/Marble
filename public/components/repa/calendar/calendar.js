@@ -59,7 +59,7 @@ export default class RepaCalendar extends BaseComponent {
                     found.children[0].classList.add("selected");
                     this.selected.push(date);
                 } else if (this.range) {
-                    this.close(() => {
+                    this.close(this.selected, () => {
                         this.range = false;
                         this.selected = [];
 
@@ -69,7 +69,7 @@ export default class RepaCalendar extends BaseComponent {
                         }
                     });
                 } else if (found.children[0].classList.contains("selected")) {
-                    this.close(() => {
+                    this.close(this.selected[this.selected.findIndex(value => value.day === date.day)], () => {
                         found.children[0].classList.remove("selected");
                         const dateIndex = this.selected.findIndex(value => value.day === date.day);
                         this.selected.splice(dateIndex, dateIndex > -1 ? 1 : 0);
@@ -79,7 +79,7 @@ export default class RepaCalendar extends BaseComponent {
                     this.selected.push(date);
                 } else if (scope) {
                     if (this.selected.length > 1) {
-                        this.close(() => {
+                        this.close(this.selected, () => {
                             this.range = false;
                             this.selected = [];
 
@@ -127,7 +127,7 @@ export default class RepaCalendar extends BaseComponent {
                         }
                     }
                 } else {
-                    this.close(() => {
+                    this.close(this.selected, () => {
                         this.range = false;
                         this.selected = [];
 

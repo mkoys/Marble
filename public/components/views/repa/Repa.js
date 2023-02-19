@@ -17,10 +17,45 @@ export default class MarbleRepa extends BaseComponent {
         const alert = this.shadowRoot.querySelector(".alert");
         const save = alert.querySelector(".save");
         const discard = alert.querySelector(".discard");
+        let attendanceClose = false;
 
         calendar.nextMonth = () => {
             this.map = new Map();
             mainElement.innerHTML = "";
+        }
+
+        this.closing = async (value) => {
+            alert.classList.remove("closed");
+            const alertText = alert.querySelector(".alertHeaderText");
+            
+            if(Array.isArray(value)) {
+                if(value.length == 1) {
+                    alertText.textContent = `Close ${value[0].day}. ${monthNames[value[0].month]} ${value[0].year} card?` 
+                }else {
+                    alertText.textContent = `Close all cards?` 
+                }
+            }else if (value) { 
+                alertText.textContent = `Close ${value.day}. ${monthNames[value.month]} ${value.year} card?` 
+            };
+
+            const result = await new Promise(resolve => {
+                function yes() {
+                    alert.classList.add("closed");
+                    save.removeEventListener("click", yes);
+                    discard.removeEventListener("click", no);
+                    resolve(false);
+                }
+                function no() {
+                    alert.classList.add("closed");
+                    save.removeEventListener("click", yes);
+                    discard.removeEventListener("click", no);
+                    resolve(true);
+                }
+                save.addEventListener("click", yes);
+                discard.addEventListener("click", no);
+            });
+
+            return result;
         }
 
         calendar.change = ((selected, range) => {
@@ -34,17 +69,19 @@ export default class MarbleRepa extends BaseComponent {
                     mainElement.appendChild(newAttendance);
 
                     newAttendance.close(async () => {
-                        this.map.delete(`${item.day} ${item.month} ${item.year}`);
-                        newAttendance.remove();
-                        calendar.open(item, false, false)
+                        calendar.open(item, false, false);
                     });
                 }
             });
             this.checkMapped(selected, range);
         });
 
-        calendar.close = (close) => {
-            close();
+        calendar.close = async (value, close) => {
+            const result = await this.closing(value);
+            if (result) {
+                close();
+                this.checkMapped(calendar.selected, calendar.range)
+            }
         }
 
         this.checkMapped = (selected, range = false) => {
@@ -60,8 +97,7 @@ export default class MarbleRepa extends BaseComponent {
                 }
 
                 index++;
-            })
-
+            });
         }
     }
 }
