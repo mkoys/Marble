@@ -58,8 +58,38 @@ export default class MarbleRepa extends BaseComponent {
             for (let index = 0; index < mainElement.children.length; index++) {
                 const element = mainElement.children[index];
                 const indexFinal = final.findIndex(value => element.getAttribute("date") === `${value.day}. ${monthNames[value.month]} ${value.year}`)
-                if (indexFinal > -1) {
+                const splitDate = element.getAttribute("date").split(" ");
+                const indexFound = this.data.findIndex(value => value.date.day == parseInt(splitDate[0].slice(0, splitDate[0].length - 1)) && value.date.month == parseInt(monthNames.indexOf(splitDate[1])) && value.date.year == parseInt(splitDate[2]))
+                if (indexFound > -1) {
+                    const currentData = this.data[indexFound];
+                    const inputs = element.shadowRoot.querySelectorAll(".boxInput");
+                    for (let inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
+                        const input = inputs[inputIndex];
+                        let description = input.querySelector(".description").value;
+                        let time = input.querySelector(".time").value;
+                        let classType = input.querySelector(".class").value;
+                        if (description === "") { description = undefined }
+                        if (time === "") { time = undefined }
+                        if (classType === "") { classType = undefined }
+                        if(currentData.content[inputIndex]?.description?.length == 0) {currentData.content[inputIndex].description = undefined}
+                        if(currentData.content[inputIndex]?.time?.length == 0) {currentData.content[inputIndex].time = undefined}
+                        if(currentData.content[inputIndex]?.classType?.length == 0) {currentData.content[inputIndex].classType = undefined}
+                        
+                        if (
+                            currentData.content[inputIndex]?.description !== description ||
+                            currentData.content[inputIndex]?.time !== time ||
+                            currentData.content[inputIndex]?.classType !== classType
+                            ) {
+                                console.log(1);
+                                console.log(currentData.content[inputIndex]?.description, description);
+                                console.log(currentData.content[inputIndex]?.time, time);
+                                console.log(currentData.content[inputIndex]?.classType, classType);
+                            prompt = true;
+                        }
+                    }
+                } else if (indexFinal > -1) {
                     const data = element.data();
+                    console.log(this.data);
                     if (data.content.length > 0) {
                         prompt = true;
                     }
@@ -70,24 +100,57 @@ export default class MarbleRepa extends BaseComponent {
                 setTimeout(() => { alert.style.opacity = 1 }, 50);
                 alert.classList.remove("closed");
                 const result = await new Promise(resolve => {
-                    function yes() {
+                    const yes = () => {
                         alert.style.opacity = 1;
                         alert.classList.add("closed");
-                        save.removeEventListener("click", yes);
+                        save.removeEventListener("click", nosave);
                         closeAlert.removeEventListener("click", yes);
                         discard.removeEventListener("click", no);
                         resolve(false);
                     }
-                    function no() {
+                    const no = () => {
                         alert.style.opacity = 0;
                         alert.classList.add("closed");
-                        save.removeEventListener("click", yes);
+                        save.removeEventListener("click", nosave);
                         closeAlert.removeEventListener("click", yes);
                         discard.removeEventListener("click", no);
                         resolve(true);
                     }
+
+                    const nosave = async () => {
+                        alert.style.opacity = 0;
+                        alert.classList.add("closed");
+                        save.removeEventListener("click", nosave);
+                        closeAlert.removeEventListener("click", yes);
+                        discard.removeEventListener("click", no);
+                        this.map.forEach(async value => {
+                            const data = value.data();
+
+                            await fetch("http://localhost:8000/repa/insert", {
+                                method: "POST",
+                                body: JSON.stringify(data),
+                                headers: { authorization: "Bearer " + localStorage.getItem("token") }
+                            });
+                        });
+
+                        setTimeout(async () => {
+                            const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
+
+                            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                                method: "POST",
+                                body: JSON.stringify(monthFilter),
+                                headers: {
+                                    authorization: "Bearer " + localStorage.getItem("token")
+                                }
+                            });
+
+                            this.data = await dataForMonth.json();
+                            calendar.update();
+                        }, 100);
+                        resolve(true);
+                    }
                     closeAlert.addEventListener("click", yes);
-                    save.addEventListener("click", yes);
+                    save.addEventListener("click", nosave);
                     discard.addEventListener("click", no);
                 });
 
@@ -103,8 +166,7 @@ export default class MarbleRepa extends BaseComponent {
                 if (!this.map.has(`${item.day} ${item.month} ${item.year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
                     this.map.set(`${item.day} ${item.month} ${item.year}`, newAttendance);
-                    const foundIndex = this.data.findIndex(value => value.date.day == parseInt(item.day) && value.date.month == parseInt(item.month) && value.date.year == parseInt(item.year))
-                    console.log(this.data);
+                    const foundIndex = this.data.findIndex(value => value.date.day == parseInt(item.day) && value.date.month == parseInt(item.month) && value.date.year == parseInt(item.year));
                     if (foundIndex > -1) {
                         newAttendance.message = this.data[foundIndex];
                     }
@@ -113,9 +175,9 @@ export default class MarbleRepa extends BaseComponent {
                     mainElement.appendChild(newAttendance);
 
                     newAttendance.save(async () => {
-                        setTimeout(async () => {                            
+                        setTimeout(async () => {
                             const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
-    
+
                             const dataForMonth = await fetch("http://localhost:8000/repa/read", {
                                 method: "POST",
                                 body: JSON.stringify(monthFilter),
@@ -123,7 +185,7 @@ export default class MarbleRepa extends BaseComponent {
                                     authorization: "Bearer " + localStorage.getItem("token")
                                 }
                             });
-    
+
                             this.data = await dataForMonth.json();
                             calendar.update();
                         }, 100);
