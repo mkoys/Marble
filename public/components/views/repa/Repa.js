@@ -26,9 +26,9 @@ export default class MarbleRepa extends BaseComponent {
 
         this.closing = async (value) => {
             const alertText = alert.querySelector(".alertHeaderText");
-            
+
             let final = [];
-            
+
             if (Array.isArray(value)) {
                 final = value;
                 if (value.length == 1) {
@@ -40,30 +40,33 @@ export default class MarbleRepa extends BaseComponent {
                 final.push(value);
                 alertText.textContent = `Close ${value.day}. ${monthNames[value.month]} ${value.year} card?`
             };
-            
+
             let prompt = false;
 
             for (let index = 0; index < mainElement.children.length; index++) {
                 const element = mainElement.children[index];
                 const indexFinal = final.findIndex(value => element.getAttribute("date") === `${value.day}. ${monthNames[value.month]} ${value.year}`)
-                if(indexFinal > -1) {
-                   const data = element.data();
-                    if(data.content.length > 0) {
+                if (indexFinal > -1) {
+                    const data = element.data();
+                    if (data.content.length > 0) {
                         prompt = true;
                     }
                 }
             }
 
             if (prompt) {
+                setTimeout(() => { alert.style.opacity = 1 }, 50);
                 alert.classList.remove("closed");
                 const result = await new Promise(resolve => {
                     function yes() {
+                        alert.style.opacity = 1;
                         alert.classList.add("closed");
                         save.removeEventListener("click", yes);
                         discard.removeEventListener("click", no);
                         resolve(false);
                     }
                     function no() {
+                        alert.style.opacity = 0; 
                         alert.classList.add("closed");
                         save.removeEventListener("click", yes);
                         discard.removeEventListener("click", no);
@@ -72,7 +75,7 @@ export default class MarbleRepa extends BaseComponent {
                     save.addEventListener("click", yes);
                     discard.addEventListener("click", no);
                 });
-                
+
                 return result;
             } else {
                 return true;
