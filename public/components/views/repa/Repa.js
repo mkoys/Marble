@@ -103,7 +103,10 @@ export default class MarbleRepa extends BaseComponent {
                 if (!this.map.has(`${item.day} ${item.month} ${item.year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
                     this.map.set(`${item.day} ${item.month} ${item.year}`, newAttendance);
-
+                    const foundIndex = this.data.findIndex(value => value.date.day == parseInt(item.day) && value.date.month == parseInt(item.month) &&  value.date.year == parseInt(item.year))
+                    if(foundIndex > -1) {
+                        newAttendance.message = this.data[foundIndex];
+                    } 
                     newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);
                     mainElement.appendChild(newAttendance);

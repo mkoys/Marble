@@ -68,6 +68,32 @@ export default class RepaAttendance extends BaseComponent {
             buttonMenu.classList.add("hideMenu");
         }
 
+        let inputsElement = this.shadowRoot.querySelector(".boxInput");
+        let inputsElementEmpty = inputsElement.cloneNode(true);
+        let previous = null;
+
+        let description = inputsElement.querySelector(".description");
+        let time = inputsElement.querySelector(".time");
+        let classType = inputsElement.querySelector(".class");
+
+        if (this.message) {
+            const bottom = box.children[2];
+            box.removeChild(box.children[2]);
+
+            this.message.content.forEach(row => {
+                description.value = row.description;
+                time.value = row.time;
+                classType.value = row.classType;
+
+                const inputsElementCopy = inputsElementEmpty.cloneNode(true);
+                description = inputsElementCopy.querySelector(".description");
+                time = inputsElementCopy.querySelector(".time");
+                classType = inputsElementCopy.querySelector(".class");
+                box.appendChild(inputsElementCopy);
+            });
+            box.appendChild(bottom);
+        }
+
         if (this.getAttribute("noclose")) {
             closeElement.classList.add("hide");
         } else {
@@ -104,7 +130,6 @@ export default class RepaAttendance extends BaseComponent {
             return finalValue;
         }
 
-
         saveButton.addEventListener("click", () => {
             const data = this.data();
             fetch("http://localhost:8000/repa/insert", {
@@ -114,14 +139,6 @@ export default class RepaAttendance extends BaseComponent {
             });
             this.saveCallback(data);
         });
-
-        let inputsElement = this.shadowRoot.querySelector(".boxInput");
-        let inputsElementEmpty = inputsElement.cloneNode(true);
-        let previous = null;
-
-        let description = inputsElement.querySelector(".description");
-        let time = inputsElement.querySelector(".time");
-        let classType = inputsElement.querySelector(".class");
 
         description.addEventListener("input", () => checkNext());
         time.addEventListener("input", () => checkNext());
