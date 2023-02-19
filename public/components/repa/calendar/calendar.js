@@ -38,7 +38,7 @@ export default class RepaCalendar extends BaseComponent {
             this.renderCalendar(this.currentDate);
         }
 
-        this.open = (date, multiple = false, scope = false) => {
+        this.open = (date, multiple = false, scope = false, trigger = true) => {
             const dateElement = this.shadowRoot.querySelector(".dates"); // Dates root
 
             let found = null;
@@ -129,7 +129,10 @@ export default class RepaCalendar extends BaseComponent {
                     }
                     this.open(date, false, false);
                 }
-                this.change(this.selected);
+                
+                if(trigger) {
+                    this.change(this.selected);
+                }
             }
         }
 
