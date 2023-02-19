@@ -23,8 +23,8 @@ export default class MarbleRepa extends BaseComponent {
             mainElement.innerHTML = "";
         }
 
-        calendar.change = ((selected) => {
-            selected.forEach(item => {
+        calendar.change = ((selected, range) => {
+            selected.forEach((item, itemIndex) => {
                 if (!this.map.has(`${item.day} ${item.month} ${item.year}`)) {
                     const newAttendance = document.createElement("marble-repa-attendance");
                     this.map.set(`${item.day} ${item.month} ${item.year}`, newAttendance);
@@ -40,15 +40,22 @@ export default class MarbleRepa extends BaseComponent {
                     });
                 }
             });
-            this.checkMapped(selected);
+            this.checkMapped(selected, range);
         });
 
-        this.checkMapped = (selected) => {
+        this.checkMapped = (selected, range = false) => {
+            let index = 0;
             this.map.forEach(async (item, key) => {
+
+                if(range && index !== 0) {
+                    item.setAttribute("noclose", "true")
+                }
+
                 if (selected.findIndex(value => key === `${value.day} ${value.month} ${value.year}`) == -1) {
                     item.remove();
                     this.map.delete(key);
                 }
+                index++;
             })
         }
     }

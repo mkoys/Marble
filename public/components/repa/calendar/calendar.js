@@ -129,9 +129,9 @@ export default class RepaCalendar extends BaseComponent {
                     }
                     this.open(date, false, false);
                 }
-                
+
                 if(trigger) {
-                    this.change(this.selected);
+                    this.change(this.selected, this.range);
                 }
             }
         }
