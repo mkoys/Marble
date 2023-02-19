@@ -169,8 +169,11 @@ export default class MarbleRepa extends BaseComponent {
                     const foundIndex = this.data.findIndex(value => value.date.day == parseInt(item.day) && value.date.month == parseInt(item.month) && value.date.year == parseInt(item.year));
                     if (foundIndex > -1) {
                         newAttendance.message = this.data[foundIndex];
+                        newAttendance.setAttribute("status", "Saved ✓");
+                        newAttendance.setAttribute("statusColor", "var(--secondary-color)");
+                    }else {
+                        newAttendance.setAttribute("status", "Unsaved ✗");
                     }
-                    newAttendance.setAttribute("week", "None");
                     newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);
                     mainElement.appendChild(newAttendance);
 

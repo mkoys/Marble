@@ -101,8 +101,12 @@ export default class RepaAttendance extends BaseComponent {
             });
         }
 
-        if (this.getAttribute("week")) {
-            weekText.textContent = "Week " + this.getAttribute("week");
+        if (this.getAttribute("status")) {
+            weekText.textContent = this.getAttribute("status");
+        }
+
+        if(this.getAttribute("statusColor")) {
+            weekText.style.color = `rgb(${this.getAttribute("statusColor")})`;
         }
 
         if (this.getAttribute("date")) {
