@@ -18,7 +18,7 @@ export default class MarbleRepa extends BaseComponent {
         const save = alert.querySelector(".save");
         const discard = alert.querySelector(".discard");
 
-        calendar.changeCallback = () => {
+        calendar.nextMonth = () => {
             this.map = new Map();
             mainElement.innerHTML = "";
         }
@@ -33,21 +33,19 @@ export default class MarbleRepa extends BaseComponent {
                     newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);
                     mainElement.appendChild(newAttendance);
 
-                    newAttendance.close(() => {
+                    newAttendance.close(async () => {
                         this.map.delete(`${item.day} ${item.month} ${item.year}`);
                         newAttendance.remove();
                         calendar.open(item, false, false);
-                    })
+                    });
                 }
             });
-
             this.checkMapped(selected);
-
         });
 
         this.checkMapped = (selected) => {
-            this.map.forEach((item, key) => {
-                if(selected.findIndex(value => key === `${value.day} ${value.month} ${value.year}`) == -1) {
+            this.map.forEach(async (item, key) => {
+                if (selected.findIndex(value => key === `${value.day} ${value.month} ${value.year}`) == -1) {
                     item.remove();
                     this.map.delete(key);
                 }

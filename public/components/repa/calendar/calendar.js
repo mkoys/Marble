@@ -6,42 +6,39 @@ export default class RepaCalendar extends BaseComponent {
         this.addStyle("reset.css");
         this.addStyle("calendar.css", import.meta.url);
         this.useTemplate("/components/repa/calendar/calendar.html");
+
+        this.currentDate = new Date();
+        this.monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        this.nextMonth = () => {}
         this.change = () => {}
         this.selected = [];
         this.range = false;
-        this.closeCallback = () => { }
-        this.changeCallback = () => { }
-        this.selectedCallback = () => { }
-        this.currentDate = new Date();
-        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+        
         this.load = () => {
             const nextElement = this.shadowRoot.querySelector(".next");
             const backElement = this.shadowRoot.querySelector(".back");
 
             nextElement.addEventListener("click", () => {
+                this.range = false;
                 this.selected = [];
-                this.currentSelect = [];
-                this.rangeSelected = [];
                 this.currentDate.setMonth(this.currentDate.getMonth() + 1);
                 this.renderCalendar(this.currentDate);
-                this.changeCallback();
+                this.nextMonth();
             });
 
             backElement.addEventListener("click", () => {
+                this.range = false;
                 this.selected = [];
-                this.currentSelect = [];
-                this.rangeSelected = [];
                 this.currentDate.setMonth(this.currentDate.getMonth() - 1);
                 this.renderCalendar(this.currentDate);
-                this.changeCallback();
+                this.nextMonth();
             });
 
             this.renderCalendar(this.currentDate);
         }
 
         this.open = (date, multiple = false, scope = false) => {
-
             const dateElement = this.shadowRoot.querySelector(".dates"); // Dates root
 
             let found = null;
@@ -63,6 +60,7 @@ export default class RepaCalendar extends BaseComponent {
                 }else if(this.range) {
                     this.range = false;
                     this.selected = [];
+
                     for(const child of  dateElement.children) {
                         child.classList.remove("range", "rangeStart", "rangeEnd");
                         child.children[0].classList.remove("selected");
@@ -78,6 +76,7 @@ export default class RepaCalendar extends BaseComponent {
                     if(this.selected.length > 1) {
                         this.range = false;
                         this.selected = [];
+
                         for(const child of  dateElement.children) {
                             child.classList.remove("range", "rangeStart", "rangeEnd");
                             child.children[0].classList.remove("selected");
@@ -108,6 +107,7 @@ export default class RepaCalendar extends BaseComponent {
                         for (let index = 0; index < rangeElements.length; index++) {    
                             const element = rangeElements[index];
                             this.selected.push({day: element.textContent, month: date.month, year: date.year});
+
                             if(index == 0) {
                                 element.classList.add("rangeStart");
                                 element.children[0].classList.add("selected");
@@ -122,19 +122,15 @@ export default class RepaCalendar extends BaseComponent {
                 }else {
                     this.range = false;
                     this.selected = [];
+
                     for(const child of  dateElement.children) {
                         child.classList.remove("range", "rangeStart", "rangeEnd");
                         child.children[0].classList.remove("selected");
                     }
                     this.open(date, false, false);
                 }
-
                 this.change(this.selected);
             }
-        }
-
-        this.clickDate = (date) => {
-            console.log(date);
         }
 
         this.renderCalendar = (date) => {
@@ -142,7 +138,7 @@ export default class RepaCalendar extends BaseComponent {
             const dateTextElement = this.shadowRoot.querySelector(".currentText"); // Date text
 
             // Set date text
-            dateTextElement.textContent = `${monthNames[date.getMonth()]} ${date.getFullYear()}`
+            dateTextElement.textContent = `${this.monthNames[date.getMonth()]} ${date.getFullYear()}`
 
             // Get days for current set month with tag
             const currentDays = getAllDaysInMonth(date.getFullYear(), date.getMonth(), true);
