@@ -91,10 +91,24 @@ export default class RepaAttendance extends BaseComponent {
                 box.appendChild(inputsElementCopy);
             });
             box.appendChild(bottom);
-            previous = { inputsElement: box.children[box.children.length - 3], description: box.children[box.children.length - 3].querySelector(".description"), time: box.children[box.children.length - 3].querySelector(".time"), classType: box.children[box.children.length - 3].querySelector(".class") }
-            previous.description.addEventListener("input", () => this.checkBefore());
-            previous.time.addEventListener("input", () => this.checkBefore());
-            previous.classType.addEventListener("input", () => this.checkBefore());
+            if (box.children[box.children.length - 3].classList.contains("boxInput")) {
+                previous = { inputsElement: box.children[box.children.length - 3], description: box.children[box.children.length - 3].querySelector(".description"), time: box.children[box.children.length - 3].querySelector(".time"), classType: box.children[box.children.length - 3].querySelector(".class") }
+                previous.description.addEventListener("input", () => this.checkBefore());
+                previous.time.addEventListener("input", () => this.checkBefore());
+                previous.classType.addEventListener("input", () => this.checkBefore());
+            }
+
+            const checkboxes = box.children[box.children.length - 1].querySelectorAll("marble-checkbox");
+
+            if(this.message.checked) {
+                for (let index = 0; index < checkboxes.length; index++) {
+                    const element = checkboxes[index];
+                    if(element.classList.contains(this.message.checked)) {
+                        element.setAttribute("checked", "true");
+                    }
+                }
+            }
+            
         }
 
         if (this.getAttribute("noclose")) {
@@ -120,6 +134,17 @@ export default class RepaAttendance extends BaseComponent {
         this.data = () => {
             const splitDate = this.getAttribute("date").split(" ");
             finalValue = { date: { day: parseInt(splitDate[0].slice(0, splitDate[0].length - 1)), month: monthNames.indexOf(splitDate[1]), year: parseInt(splitDate[2]) }, content: [] };
+            const checkBoxes = box.querySelectorAll("marble-checkbox");
+            let checked = false;
+            for (let index = 0; index < checkBoxes.length; index++) {
+                const element = checkBoxes[index];
+                if(element.checked) {
+                    checked = element.classList.contains("company") ? "company" : "school";
+                }
+            }
+
+            finalValue.checked = checked;
+
             for (let index = 1; index < box.children.length - 1; index++) {
                 const item = box.children[index];
                 const description = item.querySelector(".description").value;
@@ -129,7 +154,7 @@ export default class RepaAttendance extends BaseComponent {
                     finalValue.content.push({
                         description,
                         classType,
-                        time
+                        time,
                     })
                 }
             }

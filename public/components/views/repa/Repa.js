@@ -81,15 +81,11 @@ export default class MarbleRepa extends BaseComponent {
                             (currentData.content[inputIndex]?.time ? currentData.content[inputIndex]?.time : "") !== time ||
                             (currentData.content[inputIndex]?.classType ? currentData.content[inputIndex]?.classType : "") !== classType
                         ) {
-                            console.log(currentData.content[inputIndex]?.description, description);
-                            console.log(currentData.content[inputIndex]?.time, time);
-                            console.log(currentData.content[inputIndex]?.classType, classType);
                             prompt = true;
                         }
                     }
                 } else if (indexFinal > -1) {
                     const data = element.data();
-                    console.log(this.data);
                     if (data.content.length > 0) {
                         prompt = true;
                     }
@@ -170,7 +166,9 @@ export default class MarbleRepa extends BaseComponent {
                     if (foundIndex > -1) {
                         newAttendance.message = this.data[foundIndex];
                         newAttendance.setAttribute("status", "✓ Saved");
+
                         newAttendance.setAttribute("statusColor", "var(--secondary-color)");
+                        
                     } else {
                         newAttendance.setAttribute("status", "✗ Unsaved");
                     }

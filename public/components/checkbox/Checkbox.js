@@ -13,6 +13,10 @@ export default class MarbleCheckbox extends BaseComponent {
             this.checkboxElement = this.shadowRoot.querySelector(".checkbox");
             this.checkElement = this.shadowRoot.querySelector("svg");
 
+            if(this.getAttribute("checked")) {
+                this.action();
+            }
+
             this.checkboxElement.addEventListener("keydown", (event) => {
                 if (event.key === "Enter") { this.action() }
             });
