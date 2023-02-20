@@ -118,6 +118,14 @@ input {
     fill: rgb(200, 200, 200);
 }
 
+*:disabled {
+    background-color: #0e0e0e;
+}
+
+*:disabled::placeholder {
+    color: rgb(93, 93, 93);
+}
+
 .closeIcon {
     cursor: pointer;
 }

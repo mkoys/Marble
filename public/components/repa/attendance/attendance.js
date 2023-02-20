@@ -100,15 +100,15 @@ export default class RepaAttendance extends BaseComponent {
 
             const checkboxes = box.children[box.children.length - 1].querySelectorAll("marble-checkbox");
 
-            if(this.message.checked) {
+            if (this.message.checked) {
                 for (let index = 0; index < checkboxes.length; index++) {
                     const element = checkboxes[index];
-                    if(element.classList.contains(this.message.checked)) {
+                    if (element.classList.contains(this.message.checked)) {
                         element.setAttribute("checked", "true");
                     }
                 }
             }
-            
+
         }
 
         if (this.getAttribute("noclose")) {
@@ -138,7 +138,7 @@ export default class RepaAttendance extends BaseComponent {
             let checked = false;
             for (let index = 0; index < checkBoxes.length; index++) {
                 const element = checkBoxes[index];
-                if(element.checked) {
+                if (element.checked) {
                     checked = element.classList.contains("company") ? "company" : "school";
                 }
             }
@@ -162,14 +162,21 @@ export default class RepaAttendance extends BaseComponent {
             return finalValue;
         }
 
-        saveButton.addEventListener("click", () => {
+        saveButton.addEventListener("click", async () => {
             const data = this.data();
-            fetch("http://localhost:8000/repa/insert", {
+            await fetch("http://localhost:8000/repa/insert", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: { authorization: "Bearer " + localStorage.getItem("token") }
             });
             this.saveCallback(data);
+            if(data.content.length != 0) {
+                weekText.textContent = "✓ Saved";
+                weekText.style.color = "rgb(var(--secondary-color))"
+            }else {
+                weekText.textContent = "✗ Unsaved";
+                weekText.style.color = "rgb(200, 200, 200)";
+            }
         });
 
         description.addEventListener("input", () => this.checkNext());
