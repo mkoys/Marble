@@ -30,6 +30,11 @@
 
 .downArrow {
     margin-left: 10px;
+    cursor: pointer;
+}
+
+.rotatedArrow {
+    transform: rotate(180deg);
 }
 
 .controls {
@@ -145,7 +150,6 @@
 }
 
 .menu {
-    padding: 10px;
     border-radius: 4px;
     top: 9px;
     right: 28px;
@@ -158,6 +162,15 @@
     text-decoration: none;
     color:rgb(200, 200, 200);
     font-size: 14px;
+    padding: 10px;
+}
+
+.currentYear {
+    background-color: rgba(var(--main-color), 0.6);
+}
+
+.menuItem:hover {
+    text-decoration: underline;
 }
 
 .hidden {

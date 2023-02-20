@@ -33,7 +33,11 @@ export default class RepaCalendar extends BaseComponent {
             downArrow.addEventListener('click', (e) => {
                 let dropdown = this.shadowRoot.querySelector('.dropdown')
                 dropdown.classList.toggle("hidden")
-                console.log("1")
+                if (downArrow.classList.contains('rotatedArrow')) {
+                    downArrow.classList.remove('rotatedArrow')
+                } else {
+                    downArrow.classList.add('rotatedArrow')
+                }
             })
 
             let startOfYears = 2000;
@@ -41,18 +45,24 @@ export default class RepaCalendar extends BaseComponent {
             const arrYears = new Array(1000).fill(null).map(() => startOfYears++);
 
             let arrIndex = arrYears.indexOf(currentYear);
-            let finalArrOfYears = arrYears.slice(arrIndex - 5, arrIndex + 5);
+            let finalArrOfYears = arrYears.slice(arrIndex - 3, arrIndex + 4);
 
             let text = "";
             for (let i = 0; i < finalArrOfYears.length; i++) {
                 const para = document.createElement("li");
-                para.classList.add("menuItem");
+                if(i == 3){
+                    para.classList.add("menuItem","currentYear");
+                }else{
+                    para.classList.add("menuItem");
+                }
                 const element = this.shadowRoot.querySelector(".menu");
                 text = finalArrOfYears[i];
                 para.textContent = text;
                 element.appendChild(para);
             }
 
+            /*
+            hore je uz downarrow s touto funkcionalitou
             let dropdown = this.shadowRoot.querySelector('.dropdown')
             dropdown.addEventListener('click', (e) => {
                 if (dropdown.classList.contains('closed')) {
@@ -60,7 +70,7 @@ export default class RepaCalendar extends BaseComponent {
                 } else {
                     dropdown.classList.add('closed')
                 }
-            })
+            })*/
         }
 
         this.renderCalendar = (date) => {
