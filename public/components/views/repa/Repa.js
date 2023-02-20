@@ -72,14 +72,14 @@ export default class MarbleRepa extends BaseComponent {
                         let description = descriptionElement.value;
                         let time = timeElement.value;
                         let classType = classTypeElement.value;
+                        // if (description === "") { description = currentData.content[inputIndex]?.description }
+                        // if (time === "") { time = currentData.content[inputIndex]?.time }
+                        // if (classType === "") { classType = currentData.content[inputIndex]?.classType }
 
-                        if (description === "") { description = currentData.content[inputIndex]?.description }
-                        if (time === "") { time = currentData.content[inputIndex]?.time }
-                        if (classType === "") { classType = currentData.content[inputIndex]?.classType }
                         if (
-                            currentData.content[inputIndex]?.description !== description ||
-                            currentData.content[inputIndex]?.time !== time ||
-                            currentData.content[inputIndex]?.classType !== classType
+                            (currentData.content[inputIndex]?.description ? currentData.content[inputIndex]?.description : "") !== description ||
+                            (currentData.content[inputIndex]?.time ? currentData.content[inputIndex]?.time : "") !== time ||
+                            (currentData.content[inputIndex]?.classType ? currentData.content[inputIndex]?.classType : "") !== classType
                         ) {
                             console.log(currentData.content[inputIndex]?.description, description);
                             console.log(currentData.content[inputIndex]?.time, time);
