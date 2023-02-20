@@ -65,25 +65,25 @@ export default class MarbleRepa extends BaseComponent {
                     const inputs = element.shadowRoot.querySelectorAll(".boxInput");
                     for (let inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
                         const input = inputs[inputIndex];
-                        let description = input.querySelector(".description").value;
-                        let time = input.querySelector(".time").value;
-                        let classType = input.querySelector(".class").value;
-                        if (description === "") { description = undefined }
-                        if (time === "") { time = undefined }
-                        if (classType === "") { classType = undefined }
-                        if(currentData.content[inputIndex]?.description?.length == 0) {currentData.content[inputIndex].description = undefined}
-                        if(currentData.content[inputIndex]?.time?.length == 0) {currentData.content[inputIndex].time = undefined}
-                        if(currentData.content[inputIndex]?.classType?.length == 0) {currentData.content[inputIndex].classType = undefined}
-                        
+                        let descriptionElement = input.querySelector(".description");
+                        let timeElement = input.querySelector(".time");
+                        let classTypeElement = input.querySelector(".class");
+
+                        let description = descriptionElement.value;
+                        let time = timeElement.value;
+                        let classType = classTypeElement.value;
+
+                        if (description === "") { description = currentData.content[inputIndex]?.description }
+                        if (time === "") { time = currentData.content[inputIndex]?.time }
+                        if (classType === "") { classType = currentData.content[inputIndex]?.classType }
                         if (
                             currentData.content[inputIndex]?.description !== description ||
                             currentData.content[inputIndex]?.time !== time ||
                             currentData.content[inputIndex]?.classType !== classType
-                            ) {
-                                console.log(1);
-                                console.log(currentData.content[inputIndex]?.description, description);
-                                console.log(currentData.content[inputIndex]?.time, time);
-                                console.log(currentData.content[inputIndex]?.classType, classType);
+                        ) {
+                            console.log(currentData.content[inputIndex]?.description, description);
+                            console.log(currentData.content[inputIndex]?.time, time);
+                            console.log(currentData.content[inputIndex]?.classType, classType);
                             prompt = true;
                         }
                     }
@@ -171,7 +171,7 @@ export default class MarbleRepa extends BaseComponent {
                         newAttendance.message = this.data[foundIndex];
                         newAttendance.setAttribute("status", "✓ Saved");
                         newAttendance.setAttribute("statusColor", "var(--secondary-color)");
-                    }else {
+                    } else {
                         newAttendance.setAttribute("status", "✗ Unsaved");
                     }
                     newAttendance.setAttribute("date", `${item.day}. ${monthNames[item.month]} ${item.year}`);

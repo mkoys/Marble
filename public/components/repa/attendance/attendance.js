@@ -91,6 +91,10 @@ export default class RepaAttendance extends BaseComponent {
                 box.appendChild(inputsElementCopy);
             });
             box.appendChild(bottom);
+            previous = { inputsElement: box.children[box.children.length - 3], description: box.children[box.children.length - 3].querySelector(".description"), time: box.children[box.children.length - 3].querySelector(".time"), classType: box.children[box.children.length - 3].querySelector(".class") }
+            previous.description.addEventListener("input", () => this.checkBefore());
+            previous.time.addEventListener("input", () => this.checkBefore());
+            previous.classType.addEventListener("input", () => this.checkBefore());
         }
 
         if (this.getAttribute("noclose")) {
@@ -105,7 +109,7 @@ export default class RepaAttendance extends BaseComponent {
             weekText.textContent = this.getAttribute("status");
         }
 
-        if(this.getAttribute("statusColor")) {
+        if (this.getAttribute("statusColor")) {
             weekText.style.color = `rgb(${this.getAttribute("statusColor")})`;
         }
 
@@ -143,27 +147,27 @@ export default class RepaAttendance extends BaseComponent {
             this.saveCallback(data);
         });
 
-        description.addEventListener("input", () => checkNext());
-        time.addEventListener("input", () => checkNext());
-        classType.addEventListener("input", () => checkNext());
+        description.addEventListener("input", () => this.checkNext());
+        time.addEventListener("input", () => this.checkNext());
+        classType.addEventListener("input", () => this.checkNext());
 
-        function checkNext() {
+        this.checkNext = () => {
             if (description.value || time.value || classType.value) {
                 if (previous) {
-                    previous.description.removeEventListener("input", () => checkBefore())
-                    previous.time.removeEventListener("input", () => checkBefore())
-                    previous.classType.removeEventListener("input", () => checkBefore())
+                    previous.description.removeEventListener("input", () => this.checkBefore())
+                    previous.time.removeEventListener("input", () => this.checkBefore())
+                    previous.classType.removeEventListener("input", () => this.checkBefore())
                 }
 
-                description.removeEventListener("input", () => checkNext());
-                time.removeEventListener("input", () => checkNext());
-                classType.removeEventListener("input", () => checkNext());
+                description.removeEventListener("input", () => this.checkNext());
+                time.removeEventListener("input", () => this.checkNext());
+                classType.removeEventListener("input", () => this.checkNext());
 
                 previous = { description, time, classType, inputsElement };
 
-                previous.description.addEventListener("input", () => checkBefore())
-                previous.time.addEventListener("input", () => checkBefore())
-                previous.classType.addEventListener("input", () => checkBefore())
+                previous.description.addEventListener("input", () => this.checkBefore())
+                previous.time.addEventListener("input", () => this.checkBefore())
+                previous.classType.addEventListener("input", () => this.checkBefore())
 
                 const inputsElementCopy = inputsElementEmpty.cloneNode(true);
                 inputsElement = inputsElementCopy;
@@ -171,21 +175,21 @@ export default class RepaAttendance extends BaseComponent {
                 time = inputsElement.querySelector(".time");
                 classType = inputsElement.querySelector(".class");
 
-                description.addEventListener("input", () => checkNext());
-                time.addEventListener("input", () => checkNext());
-                classType.addEventListener("input", () => checkNext());
+                description.addEventListener("input", () => this.checkNext());
+                time.addEventListener("input", () => this.checkNext());
+                classType.addEventListener("input", () => this.checkNext());
                 box.insertBefore(inputsElement, box.children[box.childElementCount - 1]);
             }
         }
 
-        function checkBefore() {
+        this.checkBefore = () => {
             if (previous && !description.value && !time.value && !classType.value && !previous.description.value && !previous.time.value && !previous.classType.value) {
                 box.removeChild(box.children[box.childElementCount - 2]);
                 const before = box.children[box.childElementCount - 3];
 
-                previous.description.removeEventListener("input", () => checkBefore())
-                previous.time.removeEventListener("input", () => checkBefore())
-                previous.classType.removeEventListener("input", () => checkBefore())
+                previous.description.removeEventListener("input", () => this.checkBefore())
+                previous.time.removeEventListener("input", () => this.checkBefore())
+                previous.classType.removeEventListener("input", () => this.checkBefore())
                 const current = previous;
 
                 if (before.classList.contains("boxInput")) {
@@ -195,14 +199,14 @@ export default class RepaAttendance extends BaseComponent {
 
                     previous = { description, time, classType, inputsElement: before }
 
-                    previous.description.addEventListener("input", () => checkBefore())
-                    previous.time.addEventListener("input", () => checkBefore())
-                    previous.classType.addEventListener("input", () => checkBefore())
+                    previous.description.addEventListener("input", () => this.checkBefore())
+                    previous.time.addEventListener("input", () => this.checkBefore())
+                    previous.classType.addEventListener("input", () => this.checkBefore())
                 } else {
                     previous = null;
                 }
 
-                checkBefore();
+                this.checkBefore();
 
                 inputsElement = current.inputsElement;
                 description = inputsElement.querySelector(".description");
@@ -210,9 +214,9 @@ export default class RepaAttendance extends BaseComponent {
                 classType = inputsElement.querySelector(".class");
                 description.focus();
 
-                description.addEventListener("input", () => checkNext());
-                time.addEventListener("input", () => checkNext());
-                classType.addEventListener("input", () => checkNext());
+                description.addEventListener("input", () => this.checkNext());
+                time.addEventListener("input", () => this.checkNext());
+                classType.addEventListener("input", () => this.checkNext());
             }
         }
     }
