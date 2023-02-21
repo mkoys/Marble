@@ -161,7 +161,7 @@ export default class RepaCalendar extends BaseComponent {
             const dateElement = this.shadowRoot.querySelector(".dates");
 
             const monthFilter = { date: { month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() } }
-            
+
             const dataForMonth = await fetch("http://localhost:8000/repa/read", {
                 method: "POST",
                 body: JSON.stringify(monthFilter),
@@ -169,30 +169,31 @@ export default class RepaCalendar extends BaseComponent {
                     authorization: "Bearer " + localStorage.getItem("token")
                 }
             });
-            
+
             this.dataForMonthJson = await dataForMonth.json();
-            
             for (let index = 0; index < dateElement.children.length; index++) {
                 const element = dateElement.children[index];
-                if(!element.children[0].classList.contains("nodate")) {
-                    const foundIndex = this.dataForMonthJson.findIndex(value => value.date.day == parseInt(element.children[0].children[0].textContent) && value.date.month == this.currentDate.getMonth() && value.date.year == this.currentDate.getFullYear());
-                    const savedElement = element.querySelector(".saved");
-                    if(foundIndex > -1) {
+                if (!element?.children[0]?.classList.contains("nodate")) {
+                    console.log(element);
+                    const foundIndex = this.dataForMonthJson.findIndex(value => value.date.day == parseInt(element.children[0]?.children[0].textContent) && value.date.month == this.currentDate.getMonth() && value.date.year == this.currentDate.getFullYear());
+
+                    if (foundIndex > -1) {
                         const ball = document.createElement("div");
                         ball.classList.add("saved");
                         element.children[0].appendChild(ball);
                     }
 
-                    if(foundIndex == -1 && savedElement) {
+                    const savedElement = element.querySelector(".saved");
+
+                    if (foundIndex == -1 && savedElement) {
                         savedElement.remove();
                     }
                 }
             }
-            
         }
 
         this.renderCalendar = async (date) => {
-            this.update();
+            await this.update();
             const dateElement = this.shadowRoot.querySelector(".dates"); // Dates root
             const dateTextElement = this.shadowRoot.querySelector(".currentText"); // Date text
 
@@ -238,7 +239,7 @@ export default class RepaCalendar extends BaseComponent {
                 const elementText = document.createElement("p"); // Text of date
 
                 const dataIndex = this.dataForMonthJson.findIndex(value => value.date.day == day.date.getDate() && value.date.month == day.date.getMonth() && value.date.year == day.date.getFullYear());
-                if(dataIndex > -1) {
+                if (dataIndex > -1) {
                     const data = this.dataForMonthJson[dataIndex];
                     const ball = document.createElement("div");
                     ball.classList.add("saved");

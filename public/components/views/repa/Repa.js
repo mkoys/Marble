@@ -128,21 +128,18 @@ export default class MarbleRepa extends BaseComponent {
                                 headers: { authorization: "Bearer " + localStorage.getItem("token") }
                             });
                         });
+                        const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
 
-                        setTimeout(async () => {
-                            const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
+                        const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                            method: "POST",
+                            body: JSON.stringify(monthFilter),
+                            headers: {
+                                authorization: "Bearer " + localStorage.getItem("token")
+                            }
+                        });
 
-                            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
-                                method: "POST",
-                                body: JSON.stringify(monthFilter),
-                                headers: {
-                                    authorization: "Bearer " + localStorage.getItem("token")
-                                }
-                            });
-
-                            this.data = await dataForMonth.json();
-                            calendar.update();
-                        }, 100);
+                        this.data = await dataForMonth.json();
+                        calendar.update();
                         resolve(true);
                     }
                     closeAlert.addEventListener("click", yes);
@@ -168,7 +165,7 @@ export default class MarbleRepa extends BaseComponent {
                         newAttendance.setAttribute("status", "✓ Saved");
 
                         newAttendance.setAttribute("statusColor", "var(--secondary-color)");
-                        
+
                     } else {
                         newAttendance.setAttribute("status", "✗ Unsaved");
                     }
@@ -176,20 +173,18 @@ export default class MarbleRepa extends BaseComponent {
                     mainElement.appendChild(newAttendance);
 
                     newAttendance.save(async () => {
-                        setTimeout(async () => {
-                            const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
+                        const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
 
-                            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
-                                method: "POST",
-                                body: JSON.stringify(monthFilter),
-                                headers: {
-                                    authorization: "Bearer " + localStorage.getItem("token")
-                                }
-                            });
+                        const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                            method: "POST",
+                            body: JSON.stringify(monthFilter),
+                            headers: {
+                                authorization: "Bearer " + localStorage.getItem("token")
+                            }
+                        });
 
-                            this.data = await dataForMonth.json();
-                            calendar.update();
-                        }, 100);
+                        this.data = await dataForMonth.json();
+                        calendar.update();
                     });
 
                     newAttendance.close(async () => {
