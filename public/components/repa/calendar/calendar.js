@@ -38,7 +38,7 @@ export default class RepaCalendar extends BaseComponent {
                 } else {
                     downArrow.classList.add('rotatedArrow')
                 }
-            })
+            });
 
             let startOfYears = 2000;
             let currentYear = currentDate.getFullYear();
@@ -51,6 +51,10 @@ export default class RepaCalendar extends BaseComponent {
             let text = "";
             for (let i = 0; i < finalArrOfYears.length; i++) {
                 const para = document.createElement("li");
+                if(i == Math.floor(finalArrOfYears.length / 2)) {
+                    para.classList.add('active');
+                    prevYear = para;
+                }
                 para.classList.add('menuItem');
                 const element = this.shadowRoot.querySelector(".menu");
                 text = finalArrOfYears[i];
