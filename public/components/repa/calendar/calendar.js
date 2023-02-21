@@ -46,31 +46,27 @@ export default class RepaCalendar extends BaseComponent {
 
             let arrIndex = arrYears.indexOf(currentYear);
             let finalArrOfYears = arrYears.slice(arrIndex - 3, arrIndex + 4);
+            let prevYear = null;
 
             let text = "";
             for (let i = 0; i < finalArrOfYears.length; i++) {
                 const para = document.createElement("li");
-                if(i == 3){
-                    para.classList.add("menuItem","currentYear");
-                }else{
-                    para.classList.add("menuItem");
-                }
+                para.classList.add('menuItem');
                 const element = this.shadowRoot.querySelector(".menu");
                 text = finalArrOfYears[i];
                 para.textContent = text;
                 element.appendChild(para);
+                para.addEventListener("click", (e) => {
+                    currentDate.setYear(parseInt(finalArrOfYears[i]));
+                    this.renderCalendar(currentDate);  
+                    e.target.classList.add('active');
+                    if(prevYear !== null){
+                        prevYear.classList.remove('active');
+                    }
+                    prevYear = e.target;
+                })
             }
 
-            /*
-            hore je uz downarrow s touto funkcionalitou
-            let dropdown = this.shadowRoot.querySelector('.dropdown')
-            dropdown.addEventListener('click', (e) => {
-                if (dropdown.classList.contains('closed')) {
-                    dropdown.classList.remove('closed')
-                } else {
-                    dropdown.classList.add('closed')
-                }
-            })*/
         }
 
         this.renderCalendar = (date) => {

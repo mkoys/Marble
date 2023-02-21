@@ -165,7 +165,7 @@
     padding: 10px;
 }
 
-.currentYear {
+.active {
     background-color: rgba(var(--main-color), 0.6);
 }
 
