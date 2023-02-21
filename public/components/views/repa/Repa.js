@@ -139,7 +139,7 @@ export default class MarbleRepa extends BaseComponent {
                         });
 
                         this.data = await dataForMonth.json();
-                        calendar.update();
+                        await calendar.update();
                         resolve(true);
                     }
                     closeAlert.addEventListener("click", yes);
@@ -184,7 +184,7 @@ export default class MarbleRepa extends BaseComponent {
                         });
 
                         this.data = await dataForMonth.json();
-                        calendar.update();
+                        await calendar.update();
                     });
 
                     newAttendance.close(async () => {

@@ -171,19 +171,19 @@ export default class RepaCalendar extends BaseComponent {
             });
 
             this.dataForMonthJson = await dataForMonth.json();
+            let remove = [];
             for (let index = 0; index < dateElement.children.length; index++) {
                 const element = dateElement.children[index];
                 if (!element?.children[0]?.classList.contains("nodate")) {
-                    console.log(element);
                     const foundIndex = this.dataForMonthJson.findIndex(value => value.date.day == parseInt(element.children[0]?.children[0].textContent) && value.date.month == this.currentDate.getMonth() && value.date.year == this.currentDate.getFullYear());
+                    const savedElement = element.querySelector(".saved");
 
-                    if (foundIndex > -1) {
+                    if (foundIndex > -1 && !savedElement) {
                         const ball = document.createElement("div");
                         ball.classList.add("saved");
                         element.children[0].appendChild(ball);
                     }
 
-                    const savedElement = element.querySelector(".saved");
 
                     if (foundIndex == -1 && savedElement) {
                         savedElement.remove();
