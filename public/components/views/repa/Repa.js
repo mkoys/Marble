@@ -1,5 +1,5 @@
+import config from "../../../config.js";
 import BaseComponent from "../../../source/BaseComponent.js";
-
 
 export default class MarbleRepa extends BaseComponent {
     constructor() {
@@ -21,7 +21,7 @@ export default class MarbleRepa extends BaseComponent {
 
         const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
 
-        const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+        const dataForMonth = await fetch(config.baseURL + "/repa/read", {
             method: "POST",
             body: JSON.stringify(monthFilter),
             headers: {
@@ -122,7 +122,7 @@ export default class MarbleRepa extends BaseComponent {
                         this.map.forEach(async value => {
                             const data = value.data();
 
-                            await fetch("http://localhost:8000/repa/insert", {
+                            await fetch(config.baseURL + "/repa/insert", {
                                 method: "POST",
                                 body: JSON.stringify(data),
                                 headers: { authorization: "Bearer " + localStorage.getItem("token") }
@@ -130,7 +130,7 @@ export default class MarbleRepa extends BaseComponent {
                         });
                         const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
 
-                        const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                        const dataForMonth = await fetch(config.baseURL + "/repa/read", {
                             method: "POST",
                             body: JSON.stringify(monthFilter),
                             headers: {
@@ -175,7 +175,7 @@ export default class MarbleRepa extends BaseComponent {
                     newAttendance.save(async () => {
                         const monthFilter = { date: { month: calendar.currentDate.getMonth(), year: calendar.currentDate.getFullYear() } }
 
-                        const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+                        const dataForMonth = await fetch(config.baseURL + "/repa/read", {
                             method: "POST",
                             body: JSON.stringify(monthFilter),
                             headers: {

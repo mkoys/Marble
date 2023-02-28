@@ -1,3 +1,4 @@
+import config from "../../../config.js";
 import BaseComponent from "../../../source/BaseComponent.js";
 
 export default class RepaAttendance extends BaseComponent {
@@ -164,7 +165,7 @@ export default class RepaAttendance extends BaseComponent {
 
         saveButton.addEventListener("click", async () => {
             const data = this.data();
-            await fetch("http://localhost:8000/repa/insert", {
+            await fetch(config.baseURL + "/repa/insert", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: { authorization: "Bearer " + localStorage.getItem("token") }

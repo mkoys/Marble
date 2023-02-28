@@ -1,3 +1,4 @@
+import config from "../../../config.js";
 import BaseComponent from "../../../source/BaseComponent.js";
 
 export default class RepaCalendar extends BaseComponent {
@@ -38,7 +39,7 @@ export default class RepaCalendar extends BaseComponent {
 
             const monthFilter = { date: { month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() } }
 
-            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+            const dataForMonth = await fetch(config.baseURL + "/repa/read", {
                 method: "POST",
                 body: JSON.stringify(monthFilter),
                 headers: {
@@ -162,7 +163,7 @@ export default class RepaCalendar extends BaseComponent {
 
             const monthFilter = { date: { month: this.currentDate.getMonth(), year: this.currentDate.getFullYear() } }
 
-            const dataForMonth = await fetch("http://localhost:8000/repa/read", {
+            const dataForMonth = await fetch(config.baseURL + "/repa/read", {
                 method: "POST",
                 body: JSON.stringify(monthFilter),
                 headers: {
@@ -171,7 +172,6 @@ export default class RepaCalendar extends BaseComponent {
             });
 
             this.dataForMonthJson = await dataForMonth.json();
-            let remove = [];
             for (let index = 0; index < dateElement.children.length; index++) {
                 const element = dateElement.children[index];
                 if (!element?.children[0]?.classList.contains("nodate")) {
