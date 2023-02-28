@@ -8,15 +8,7 @@ export default () => {
         router = new Router({ root });
         router.addRoute("login", document.createElement("marble-login"));
         router.addRoute("register", document.createElement("marble-register"));
-        router.addRoute("repa", document.createElement("marble-repa"));
-
-        const token = localStorage.getItem("token");
-
-        if (token) {
-            router.setRoute("repa");
-        }else {
-            router.setRoute("login");
-        }
+        router.setRoute("login");
 
         return router;
     } else {
