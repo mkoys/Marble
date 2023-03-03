@@ -2,7 +2,11 @@ export default class BaseComponent extends HTMLElement {
     constructor({ } = {}) {
         super();
         this.attachShadow({ mode: "open" });
-        this.load = () => {};
+        this.load = () => { };
+    }
+
+    connectedCallback() {
+        //this.load();
     }
 
     useTemplate(templatePath, root = "root") {
@@ -15,8 +19,9 @@ export default class BaseComponent extends HTMLElement {
         }));
     }
 
-    addStyle(path, currentPath) {
-        const linkElement = document.createElement("link");
+    async addStyle(path, currentPath) {
+        const templateMap = document.querySelector("marble-resources");
+        const styleElement = document.createElement("style");
 
         let originalURL = null;
 
@@ -26,9 +31,19 @@ export default class BaseComponent extends HTMLElement {
             originalURL = new URL("..", import.meta.url);
         }
 
-        linkElement.setAttribute("rel", "stylesheet");
-        linkElement.setAttribute("href", new URL(path, originalURL).pathname);
+        const finalPath = new URL(path, originalURL).pathname;
 
-        this.shadowRoot.appendChild(linkElement);
+        const found = templateMap.get(finalPath);
+
+        if (found) {
+            styleElement.textContent = found;
+        } else {
+            const result = await fetch(finalPath);
+            const style = await result.text();
+            templateMap.add(finalPath, style);
+            styleElement.textContent = style;
+        }
+
+        this.shadowRoot.appendChild(styleElement);
     }
 }

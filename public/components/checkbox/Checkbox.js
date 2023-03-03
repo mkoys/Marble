@@ -30,5 +30,4 @@ export default class MarbleCheckbox extends BaseComponent {
         this.checked = !this.checked;
         this.checkElement.style.display = this.checked ? "block" : "none";
     }
-
 }

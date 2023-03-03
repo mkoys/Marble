@@ -4,10 +4,10 @@ export default class MarbleDropdown extends BaseComponent {
     constructor() {
         super();
         this.addStyle("reset.css");
-        this.addStyle("Dropdown.css", import.meta.url);
         this.useTemplate("/components/dropdown/Dropdown.html");
-
-        this.load = () => {
+        
+        this.load = async () => {
+            await this.addStyle("Dropdown.css", import.meta.url);
             this.droped = true;
             this.currentOptions = [];
             this.allOptions = [];
