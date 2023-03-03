@@ -48,7 +48,7 @@ label {
 }
 
 .multyInput {
-    width: 432px;
+    width: 416px;
     display: grid;
     column-gap: 20px;
     grid-template-columns: auto auto auto;
