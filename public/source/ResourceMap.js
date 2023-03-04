@@ -1,9 +1,12 @@
 import BaseComponent from "./BaseComponent.js";
 
 export default class ResourceMap extends BaseComponent {
-    constructor({ } = {}) {
+    constructor() {
         super();
         this.map = new Map();
+    }
+    
+    connectedCallback() {
         this.shadowRoot.host.style.display = "none";
     }
 
