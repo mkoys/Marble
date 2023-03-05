@@ -50,11 +50,17 @@ export default class Checkbox extends BaseComponent {
                 break;
 
             case "error":
+                const boxElement = this.shadowRoot.querySelector(".box");
+
                 if (typeof newValue === "string") {
                     newValue = JSON.parse(newValue);
                 }
 
-                this.action(newValue);
+                if(newValue) {
+                    boxElement.classList.add("error");
+                }else {
+                    boxElement.classList.remove("error");
+                }
                 break;
 
             default:

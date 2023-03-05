@@ -45,7 +45,7 @@ export default class Login extends BaseComponent {
 
                 loading.classList.remove("load");
 
-                if (error) {
+                if (!error) {
                     localStorage.setItem("token", response.token)
                     console.log("Logged in!");
                 }
