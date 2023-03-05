@@ -1,4 +1,7 @@
 .shape {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
     background-color: var(--back-color-1);
     padding: 30px 40px 30px 40px;
 }
@@ -7,4 +10,16 @@
     color: white;
     font-weight: bold;
     font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.inputSpacing {
+    margin-bottom: 15px;
+}
+
+.link {
+    width: fit-content;
+    margin-top: 5px;
+    color: #8ECDFA;
+    font-size: 13px;
 }

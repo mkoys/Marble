@@ -4,6 +4,12 @@ export default class BaseComponent extends HTMLElement {
     constructor({ } = {}) {
         super();
         this.attachShadow({ mode: "open" });
+        this.loadCallback;
+        this.load = new Promise(resolve => {
+            this.loadCallback = () => {
+                resolve();
+            }
+        });
     }
 
     async useTemplate(templatePath, currentPath) {
@@ -24,6 +30,7 @@ export default class BaseComponent extends HTMLElement {
         const template = parsedTemplate.querySelector("template").content;
 
         this.shadowRoot.appendChild(template.cloneNode(true));
+        this.loadCallback();
     }
 
     async addStyle(path, currentPath) {

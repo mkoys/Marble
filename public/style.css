@@ -2,6 +2,9 @@
 
 :root {
     --back-color-1: #151515;
+    --back-color-2: rgb(14, 14, 14);
+    --text-color-1: white;
+    --text-color-2: rgb(200, 200, 200);
 }
 
 * {
@@ -16,7 +19,7 @@ body {
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: rgb(14, 14, 14);
+    background-color: var(--back-color-2);
     justify-content: center;
     align-items: center;
 }
