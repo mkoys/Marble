@@ -57,7 +57,13 @@ export default class Register extends BaseComponent {
                 loading.classList.remove("load");
 
                 if (!error) {
+                    username.clear();
+                    email.clear();
+                    password.clear();
+                    passwordRepeat.clear();
+                    
                     console.log("Registred in!");
+                    this.router.setRoute("login");
                 }
             })
 

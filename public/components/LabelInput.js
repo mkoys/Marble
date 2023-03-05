@@ -21,6 +21,8 @@ export default class LabelInput extends BaseComponent {
             const messageElement = this.shadowRoot.querySelector("p");
             const inputElement = this.shadowRoot.querySelector("input");
 
+            this.clear = () => inputElement.value = "";
+
             inputElement.addEventListener("focusin", () => {
                 labelElement.classList.add("focus");
                 messageElement.classList.add("focus");
