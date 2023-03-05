@@ -28,17 +28,15 @@ export default class Login extends BaseComponent {
             });
 
             submit.click(async () => {
-                username.removeAttribute("error");
-                password.removeAttribute("error");
-                username.removeAttribute("message");
-                password.removeAttribute("message");
+                this.setError(username);
+                this.setError(password);
 
                 const data = {
                     username: username.getValue(),
                     password: password.getValue(),
                 }
 
-                const response = await login(data);
+                const response = await this.login(data);
 
                 const result = checkError(response);
 
@@ -48,27 +46,10 @@ export default class Login extends BaseComponent {
                 }
             });
 
-            async function login(data) {
-                let result;
-                try {
-                    result = await fetch(config.baseURL + "/auth/login", {
-                        method: "POST",
-                        body: JSON.stringify(data)
-                    });
-                } catch (error) { return { error: "Server error" } }
-
-                return await result.json();
-            }
-
-            function setError(element, message) {
-                element.setAttribute("error", "true");
-                element.setAttribute("message", message);
-            }
-
-            function checkError(response) {
+            const checkError = (response) => {
                 if (response.error) {
-                    setError(username, response.error);
-                    setError(password, response.error);
+                    this.setError(username, response.error);
+                    this.setError(password, response.error);
 
                     return 0;
                 }
@@ -81,14 +62,14 @@ export default class Login extends BaseComponent {
 
                         switch (value) {
                             case "required":
-                                setError(element, "Required");
+                                this.setError(element, "Required");
                                 break;
                             case "or":
-                                setError(element, "Required");
+                                this.setError(element, "Required");
                                 break;
                             case "auth":
-                                setError(username, "Invalid credentials");
-                                setError(password, "Invalid credentials");
+                                this.setError(username, "Invalid credentials");
+                                this.setError(password, "Invalid credentials");
                             default:
                                 break;
                         }
@@ -100,5 +81,36 @@ export default class Login extends BaseComponent {
                 return 1;
             }
         });
+    }
+
+    async connectedCallback() {
+        await this.load;
+        const username = this.shadowRoot.querySelector(".username");
+        const password = this.shadowRoot.querySelector(".password");
+
+        this.setError(username);
+        this.setError(password);
+    }
+
+    async login(data) {
+        let result;
+        try {
+            result = await fetch(config.baseURL + "/auth/login", {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+        } catch (error) { return { error: "Server error" } }
+
+        return await result.json();
+    }
+
+    setError(element, message) {
+        if(message) {
+            element.setAttribute("error", "true");
+            element.setAttribute("message", message);
+        }else {
+            element.removeAttribute("error");
+            element.removeAttribute("message");
+        }
     }
 }
