@@ -36,8 +36,7 @@ export default class LabelInput extends BaseComponent {
             case "error":
                 const elements = {
                     label: this.shadowRoot.querySelector("label"),
-                    message: this.shadowRoot.querySelector("p"),
-                    input: this.shadowRoot.querySelector("input")
+                    message: this.shadowRoot.querySelector("p")
                 };
 
                 if(typeof newValue === "string") {
@@ -47,11 +46,9 @@ export default class LabelInput extends BaseComponent {
                 if(newValue) {
                     elements.message.classList.add("errorColor");
                     elements.label.classList.add("errorColor");
-                    elements.input.classList.add("errorBorder");
                 }else {
                     elements.message.classList.remove("errorColor");
                     elements.label.classList.remove("errorColor");
-                    elements.input.classList.remove("errorBorder");
                 }
                 break;
 

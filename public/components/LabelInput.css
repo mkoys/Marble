@@ -12,17 +12,19 @@
 label {
     margin-right: 4px;
     color: var(--text-color-2);
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 13.5px;
 }
 
 p {
+    font-style: italic;
     color: var(--text-color-2);
     font-weight: 400;
-    font-size: 14px; 
+    font-size: 13.5px; 
 }
 
 input {
+    outline: none;
     border: 1px solid transparent;
     width: 440px;
     height: 41px;
@@ -35,8 +37,4 @@ input {
 
 .errorColor {
     color: var(--error-color-1);
-}
-
-.errorBorder {
-    border: 1px solid var(--error-color-1);
 }

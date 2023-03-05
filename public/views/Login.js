@@ -17,6 +17,7 @@ export default class Login extends BaseComponent {
             const username = this.shadowRoot.querySelector(".username");
             const password = this.shadowRoot.querySelector(".password");
 
+            const loading = this.shadowRoot.querySelector(".loading");
             const register = this.shadowRoot.querySelector(".register");
             const submit = this.shadowRoot.querySelector("marble-button");
 
@@ -31,19 +32,25 @@ export default class Login extends BaseComponent {
                 this.setError(username);
                 this.setError(password);
 
-                const data = {
-                    username: username.getValue(),
-                    password: password.getValue(),
-                }
+                loading.classList.add("load");
+                setTimeout(async () => {
 
-                const response = await this.login(data);
+                    const data = {
+                        username: username.getValue(),
+                        password: password.getValue(),
+                    }
 
-                const result = checkError(response);
+                    const response = await this.login(data);
 
-                if (result) {
-                    localStorage.setItem("token", response.token)
-                    console.log("Logged in!");
-                }
+                    const result = checkError(response);
+
+                    loading.classList.remove("load");
+
+                    if (result) {
+                        localStorage.setItem("token", response.token)
+                        console.log("Logged in!");
+                    }
+                }, 2000);
             });
 
             const checkError = (response) => {
@@ -105,10 +112,10 @@ export default class Login extends BaseComponent {
     }
 
     setError(element, message) {
-        if(message) {
+        if (message) {
             element.setAttribute("error", "true");
             element.setAttribute("message", message);
-        }else {
+        } else {
             element.removeAttribute("error");
             element.removeAttribute("message");
         }
