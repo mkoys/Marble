@@ -7,8 +7,6 @@ export default class LabelInput extends BaseComponent {
     constructor() {
         super();
 
-        this.clickCallback = () => { };
-
         this.addStyle("/style.css");
         this.addStyle("/components/Button.css");
         this.useTemplate("/components/Button.html");

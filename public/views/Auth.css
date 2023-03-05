@@ -32,16 +32,6 @@
     animation-play-state: running;
 }
 
-@keyframes loading {
-    from {
-        transform: translateX(-200%);
-    }
-
-    to {
-        transform: translateX(280%);
-    }
-}
-
 .header {
     color: var(--text-color-1);
     font-weight: bold;
@@ -65,14 +55,41 @@
     display: flex;
 }
 
-.redirect>p {
+.redirect>p, a {
     margin-right: 3px;
     color: var(--text-color-1);
     font-size: 13px;
 }
 
 .redirect>a {
-    font-size: 13px;
-    text-decoration: underline;
     color: var(--main-color-1);
+}
+
+.terms {
+    display: flex;
+}
+
+.termsText {
+    margin-left: 10px;
+    display: flex;
+}
+
+.termsText > p, a {
+    margin-right: 3px;
+    color: var(--text-color-1);
+    font-size: 13px;
+}
+
+.termsText > a {
+    color: var(--main-color-1);
+}
+
+@keyframes loading {
+    from {
+        transform: translateX(-200%);
+    }
+
+    to {
+        transform: translateX(280%);
+    }
 }
