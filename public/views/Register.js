@@ -19,6 +19,8 @@ export default class Register extends BaseComponent {
             const password = this.shadowRoot.querySelector(".password");
             const passwordRepeat = this.shadowRoot.querySelector(".repassword");
 
+            const checkbox = this.shadowRoot.querySelector("marble-checkbox");
+
             const loading = this.shadowRoot.querySelector(".loading");
             const login = this.shadowRoot.querySelector(".login");
             const submit = this.shadowRoot.querySelector("marble-button");
@@ -31,6 +33,7 @@ export default class Register extends BaseComponent {
             });
 
             submit.addEventListener("click", async () => {
+                checkbox.removeAttribute("error");
                 this.setError(username);
                 this.setError(email);
                 this.setError(password);
@@ -59,6 +62,11 @@ export default class Register extends BaseComponent {
             })
 
             const checkError = (response) => {
+                if(!checkbox.checked) {
+                    checkbox.setAttribute("error", "true");
+                    return 0;
+                }
+
                 if (response.error) {
                     this.setError(username, response.error);
                     this.setError(email, response.error);

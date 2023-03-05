@@ -2,7 +2,7 @@ import BaseComponent from "../source/BaseComponent.js";
 
 export default class Checkbox extends BaseComponent {
 
-    static get observedAttributes() { return ["checked"] }
+    static get observedAttributes() { return ["checked", "error"] }
 
     constructor() {
         super();
@@ -19,9 +19,9 @@ export default class Checkbox extends BaseComponent {
             boxElement.addEventListener("click", () => {
                 this.checked = !this.checked;
 
-                if(this.checked) {
+                if (this.checked) {
                     checkElement.classList.add("visible");
-                }else { 
+                } else {
                     checkElement.classList.remove("visible");
                 }
             });
@@ -34,17 +34,32 @@ export default class Checkbox extends BaseComponent {
             case "checked":
                 const checkElement = this.shadowRoot.querySelector(".check");
 
-                if(typeof newValue === "string") {
+                if (typeof newValue === "string") {
                     newValue = JSON.parse(newValue);
                 }
 
                 this.checked = newValue;
 
-                if(this.checked) {
+                if (this.checked) {
                     checkElement.classList.add("visible");
-                }else { 
+                } else {
                     checkElement.classList.remove("visible");
                 }
+                break;
+
+            case "error":
+                const boxElement = this.shadowRoot.querySelector(".box");
+
+                if (typeof newValue === "string") {
+                    newValue = JSON.parse(newValue);
+                }
+
+                if (newValue) {
+                    boxElement.classList.add("error");
+                } else {
+                    boxElement.classList.remove("error");
+                }
+
                 break;
 
             default:

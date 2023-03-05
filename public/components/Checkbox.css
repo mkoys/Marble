@@ -1,11 +1,16 @@
 .box {
-background-color: var(--back-color-2);
-width: 20px;
-height: 20px;
-border-radius: 3px;
-display: flex;
-justify-content: center;
-align-items: center;
+    background-color: var(--back-color-2);
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+}
+
+.error {
+    border: 1px solid var(--error-color-1);
 }
 
 .check {
