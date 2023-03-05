@@ -20,6 +20,17 @@
 .link {
     width: fit-content;
     margin-top: 5px;
-    color: #8ECDFA;
+    color: var(--main-color-1);
     font-size: 13px;
+}
+
+.redirect {
+    margin-top: 5px;
+    color: var(--text-color-1);
+    font-size: 13px;
+}
+
+.redirect > a {
+    text-decoration: underline;
+    color: var(--main-color-1);
 }
