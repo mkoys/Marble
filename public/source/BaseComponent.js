@@ -1,3 +1,5 @@
+import resourceMap from "./resourceMap.js";
+
 export default class BaseComponent extends HTMLElement {
     constructor({ } = {}) {
         super();
@@ -5,7 +7,6 @@ export default class BaseComponent extends HTMLElement {
     }
 
     async useTemplate(templatePath, currentPath) {
-        const templateMap = document.querySelector("marble-resources");
         const parser = new DOMParser();
 
         let originalURL = null;
@@ -18,7 +19,7 @@ export default class BaseComponent extends HTMLElement {
 
         const finalPath = new URL(templatePath, originalURL).pathname;
 
-        const found = await templateMap.get(finalPath);
+        const found = await resourceMap.get(finalPath);
         const parsedTemplate = parser.parseFromString(found, "text/html");
         const template = parsedTemplate.querySelector("template").content;
 
@@ -26,7 +27,6 @@ export default class BaseComponent extends HTMLElement {
     }
 
     async addStyle(path, currentPath) {
-        const templateMap = document.querySelector("marble-resources");
         const styleElement = document.createElement("style");
 
         let originalURL = null;
@@ -39,7 +39,7 @@ export default class BaseComponent extends HTMLElement {
 
         const finalPath = new URL(path, originalURL).pathname;
 
-        const found = await templateMap.get(finalPath);
+        const found = await resourceMap.get(finalPath);
         styleElement.textContent = found;
 
         this.shadowRoot.appendChild(styleElement);

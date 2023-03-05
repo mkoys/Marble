@@ -1,0 +1,10 @@
+.shape {
+    background-color: var(--back-color-1);
+    padding: 30px 40px 30px 40px;
+}
+
+.header {
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+}

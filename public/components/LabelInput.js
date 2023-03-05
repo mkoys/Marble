@@ -1,13 +1,13 @@
 import BaseComponent from "../source/BaseComponent.js";
 
-export default class Login extends BaseComponent {
+export default class LabelInput extends BaseComponent {
     constructor() {
         super();
     }
 
     connectedCallback() {
         this.addStyle("/style.css");
-        this.addStyle("/views/Login.css");
-        this.useTemplate("/views/Login.html");
+        this.addStyle("/components/LabelInput.css");
+        this.useTemplate("/components/LabelInput.html");
     }
 }

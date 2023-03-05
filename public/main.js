@@ -1,10 +1,14 @@
 import marble from "./marble.js";
 
+import LabelInput from "./components/LabelInput.js";
+
 import Login from "./views/Login.js";
 
-customElements.define("marble-login", Login);
-
 marble.init();
+
+customElements.define("marble-label-input", LabelInput);
+
+customElements.define("marble-login", Login);
 
 const router = marble.router();
 
