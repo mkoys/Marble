@@ -4,6 +4,8 @@ export default class BaseComponent extends HTMLElement {
     constructor({ } = {}) {
         super();
         this.attachShadow({ mode: "open" });
+        this.connectedCallback = () => {};
+        this.connected = (callback) => this.connectedCallback = callback;
         this.loadCallback;
         this.load = new Promise(resolve => {
             this.loadCallback = () => {
@@ -31,6 +33,7 @@ export default class BaseComponent extends HTMLElement {
 
         this.shadowRoot.appendChild(template.cloneNode(true));
         this.loadCallback();
+        this.connectedCallback();
     }
 
     async addStyle(path, currentPath) {

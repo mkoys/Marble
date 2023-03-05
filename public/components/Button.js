@@ -6,13 +6,19 @@ export default class LabelInput extends BaseComponent {
 
     constructor() {
         super();
-    }
-
-    connectedCallback() {
         this.addStyle("/style.css");
         this.addStyle("/components/Button.css");
         this.useTemplate("/components/Button.html");
+
+        this.connected(() => {
+            this.clickCallback = () => { };
+            this.click = (callback) => this.clickCallback = callback;
+    
+            const buttonElement = this.shadowRoot.querySelector("button");
+            buttonElement.addEventListener("click", () => this.clickCallback());
+        })
     }
+
 
     async attributeChangedCallback(name, oldValue, newValue) {
         await this.load;

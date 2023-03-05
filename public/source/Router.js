@@ -8,8 +8,8 @@ export default class Router {
     setRoute(newRoute) {
         const route = this.map.get(newRoute);
         if (!route) { return false }
+        if (this.current) { this.root.removeChild(this.map.get(this.current)) }
         this.current = newRoute;
-        this.root.innerHTML = "";
         this.root.appendChild(route);
         return true;
     }
