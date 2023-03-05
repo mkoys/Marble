@@ -16,14 +16,22 @@ export default class Checkbox extends BaseComponent {
             const boxElement = this.shadowRoot.querySelector(".box");
             const checkElement = this.shadowRoot.querySelector(".check");
 
-            boxElement.addEventListener("click", () => {
-                this.checked = !this.checked;
+            this.action = (action) => {
+                this.checked = action ? action : !this.checked;
 
                 if (this.checked) {
                     checkElement.classList.add("visible");
                 } else {
                     checkElement.classList.remove("visible");
                 }
+            }
+
+            boxElement.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") { this.action() }
+            })
+
+            boxElement.addEventListener("click", () => {
+                this.action();
             });
         })
     }
@@ -32,34 +40,21 @@ export default class Checkbox extends BaseComponent {
         await this.load;
         switch (name) {
             case "checked":
-                const checkElement = this.shadowRoot.querySelector(".check");
-
                 if (typeof newValue === "string") {
                     newValue = JSON.parse(newValue);
                 }
 
                 this.checked = newValue;
 
-                if (this.checked) {
-                    checkElement.classList.add("visible");
-                } else {
-                    checkElement.classList.remove("visible");
-                }
+                this.action(this.checked);
                 break;
 
             case "error":
-                const boxElement = this.shadowRoot.querySelector(".box");
-
                 if (typeof newValue === "string") {
                     newValue = JSON.parse(newValue);
                 }
 
-                if (newValue) {
-                    boxElement.classList.add("error");
-                } else {
-                    boxElement.classList.remove("error");
-                }
-
+                this.action(newValue);
                 break;
 
             default:
