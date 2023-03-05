@@ -1,14 +1,16 @@
 <template>
     <div class="shape">
+        <div class="loading"></div>
         <h2 class="header">
             Register
         </h2>
-        <marble-label-input class="inputSpacing" label="Username"></marble-label-input>
-        <marble-label-input class="inputSpacing" type="email" label="Email"></marble-label-input>
-        <marble-label-input type="password" label="Password"></marble-label-input>
+        <marble-label-input class="username inputSpacing" label="Username"></marble-label-input>
+        <marble-label-input class="email inputSpacing" label="Email"></marble-label-input>
+        <marble-label-input class="password inputSpacing" type="password" label="Password"></marble-label-input>
+        <marble-label-input class="repassword" type="password" label="Re-Password"></marble-label-input>
         <marble-button text="Register"></marble-button>
         <div class="redirect">
-            <p>Already have an account? </p><a href="#" class="login">Login</a>
+            <p>Need an accout? </p><a href="#" class="register">Register</a>
         </div>
     </div>
 </template>

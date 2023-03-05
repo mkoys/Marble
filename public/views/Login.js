@@ -28,7 +28,7 @@ export default class Login extends BaseComponent {
                 this.router.setRoute("register");
             });
 
-            submit.click(async () => {
+            submit.addEventListener("click", async () => {
                 this.setError(username);
                 this.setError(password);
 
