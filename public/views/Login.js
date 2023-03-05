@@ -41,22 +41,23 @@ export default class Login extends BaseComponent {
 
                 const response = await this.login(data);
 
-                const result = checkError(response);
+                const error = checkError(response);
 
                 loading.classList.remove("load");
 
-                if (result) {
+                if (error) {
                     localStorage.setItem("token", response.token)
                     console.log("Logged in!");
                 }
             });
 
             const checkError = (response) => {
+                let error = false;
+
                 if (response.error) {
                     this.setError(username, response.error);
                     this.setError(password, response.error);
-
-                    return 0;
+                    error = true;
                 }
 
                 if (response.errors) {
@@ -79,11 +80,9 @@ export default class Login extends BaseComponent {
                                 break;
                         }
                     });
-
-                    return 0;
+                    error = true;
                 }
-
-                return 1;
+                return error;
             }
         });
     }

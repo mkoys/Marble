@@ -52,19 +52,21 @@ export default class Register extends BaseComponent {
 
                 console.log(response);
 
-                const result = checkError(response);
+                const error = checkError(response);
 
                 loading.classList.remove("load");
 
-                if (result) {
+                if (!error) {
                     console.log("Registred in!");
                 }
             })
 
             const checkError = (response) => {
-                if(!checkbox.checked) {
+                let error = false;
+
+                if (!checkbox.checked) {
                     checkbox.setAttribute("error", "true");
-                    return 0;
+                    error = true;
                 }
 
                 if (response.error) {
@@ -72,8 +74,7 @@ export default class Register extends BaseComponent {
                     this.setError(email, response.error);
                     this.setError(password, response.error);
                     this.setError(passwordRepeat, response.error);
-
-                    return 0;
+                    error = true;
                 }
 
                 if (response.errors) {
@@ -98,18 +99,16 @@ export default class Register extends BaseComponent {
                             case "match":
                                 this.setError(element, "Not matching");
                                 break;
-                                case "duplicate":
-                                    this.setError(element, "Already taken");
-                                    break;
+                            case "duplicate":
+                                this.setError(element, "Already taken");
+                                break;
                             default:
                                 break;
                         }
                     });
-
-                    return 0;
+                    error = true;
                 }
-
-                return 1;
+                return error;
             }
         });
     }
