@@ -43,7 +43,7 @@
 }
 
 .header {
-    color: white;
+    color: var(--text-color-1);
     font-weight: bold;
     font-size: 30px;
     margin-bottom: 30px;

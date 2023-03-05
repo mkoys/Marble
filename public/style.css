@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 :root {
-    --main-color-1: #8ECDFA;
+    --main-color-1: #c08efa;
     --back-color-1: #151515;
     --back-color-2: rgb(14, 14, 14);
+    --back-color-3: #212121;
     --text-color-1: white;
     --text-color-2: rgb(200, 200, 200);
     --error-color-1: rgb(227, 82, 82);
