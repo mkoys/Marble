@@ -33,24 +33,22 @@ export default class Login extends BaseComponent {
                 this.setError(password);
 
                 loading.classList.add("load");
-                setTimeout(async () => {
 
-                    const data = {
-                        username: username.getValue(),
-                        password: password.getValue(),
-                    }
+                const data = {
+                    username: username.getValue(),
+                    password: password.getValue(),
+                }
 
-                    const response = await this.login(data);
+                const response = await this.login(data);
 
-                    const result = checkError(response);
+                const result = checkError(response);
 
-                    loading.classList.remove("load");
+                loading.classList.remove("load");
 
-                    if (result) {
-                        localStorage.setItem("token", response.token)
-                        console.log("Logged in!");
-                    }
-                }, 2000);
+                if (result) {
+                    localStorage.setItem("token", response.token)
+                    console.log("Logged in!");
+                }
             });
 
             const checkError = (response) => {
