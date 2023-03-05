@@ -16,7 +16,7 @@ export default class BaseComponent extends HTMLElement {
             originalURL = new URL("..", import.meta.url);
         }
 
-        const finalPath = new URL(templateMap, originalURL).pathname;
+        const finalPath = new URL(templatePath, originalURL).pathname;
 
         const found = await templateMap.get(finalPath);
         const parsedTemplate = parser.parseFromString(found, "text/html");
