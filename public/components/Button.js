@@ -18,8 +18,8 @@ export default class LabelInput extends BaseComponent {
         await this.load;
         switch (name) {
             case "text":
-                const textElement = this.shadowRoot.querySelector("p");
-                textElement.textContent = newValue;
+                const buttonElement = this.shadowRoot.querySelector("button");
+                buttonElement.textContent = newValue;
                 break;
 
             default:

@@ -4,6 +4,7 @@
     height: fit-content;
     background-color: var(--back-color-1);
     padding: 30px 40px 30px 40px;
+    border-radius: 6px;
 }
 
 .header {
@@ -26,11 +27,17 @@
 
 .redirect {
     margin-top: 5px;
+    display: flex;
+}
+
+.redirect > p {
+    margin-right: 3px;
     color: var(--text-color-1);
     font-size: 13px;
 }
 
 .redirect > a {
+    font-size: 13px;
     text-decoration: underline;
     color: var(--main-color-1);
 }

@@ -1,4 +1,6 @@
-.shape {
+button {
+    cursor: pointer;
+    border: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,8 +10,5 @@
     color: var(--back-color-2);
     border-radius: 6px;
     margin-top: 20px;
-}
-
-p {
     font-size: 14px;
 }
