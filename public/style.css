@@ -6,6 +6,7 @@
     --back-color-2: rgb(14, 14, 14);
     --text-color-1: white;
     --text-color-2: rgb(200, 200, 200);
+    --error-color-1: rgb(227, 82, 82);
 }
 
 * {
