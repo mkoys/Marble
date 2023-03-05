@@ -14,6 +14,23 @@ export default class LabelInput extends BaseComponent {
             const inputElement = this.shadowRoot.querySelector("input");
             return inputElement.value;
         }
+
+        this.connected(async () => {
+            await this.load;
+            const labelElement = this.shadowRoot.querySelector("label");
+            const messageElement = this.shadowRoot.querySelector("p");
+            const inputElement = this.shadowRoot.querySelector("input");
+
+            inputElement.addEventListener("focusin", () => {
+                labelElement.classList.add("focus");
+                messageElement.classList.add("focus");
+            });
+            
+            inputElement.addEventListener("focusout", () => {
+                labelElement.classList.remove("focus");
+                messageElement.classList.remove("focus");
+            });
+        });
     }
 
 

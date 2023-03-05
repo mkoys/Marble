@@ -14,6 +14,7 @@ label {
     color: var(--text-color-2);
     font-weight: 600;
     font-size: 13.5px;
+    transition: 0.2s ease filter;
 }
 
 p {
@@ -33,6 +34,10 @@ input {
     color: var(--text-color-1);
     font-size: 18px;
     background-color: var(--back-color-2);
+}
+
+.focus {
+    filter: brightness(150%);
 }
 
 .errorColor {

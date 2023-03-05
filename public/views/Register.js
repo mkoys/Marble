@@ -20,14 +20,14 @@ export default class Register extends BaseComponent {
             const passwordRepeat = this.shadowRoot.querySelector(".repassword");
 
             const loading = this.shadowRoot.querySelector(".loading");
-            const register = this.shadowRoot.querySelector(".register");
+            const login = this.shadowRoot.querySelector(".login");
             const submit = this.shadowRoot.querySelector("marble-button");
 
             const inputs = { username, email, password, "re-password": passwordRepeat }
 
-            register.addEventListener("click", (event) => {
+            login.addEventListener("click", (event) => {
                 event.preventDefault();
-                this.router.setRoute("register");
+                this.router.setRoute("login");
             });
 
             submit.addEventListener("click", async () => {
